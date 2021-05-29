@@ -1,0 +1,60 @@
+body {
+    font-family: sans-serif;
+  }
+
+  input {
+    border-radius: 16px;
+    border: none;
+    padding: 6px 16px;
+    outline: none;
+  }
+
+  button {
+    border-radius: 16px;
+    border: none;
+    padding: 4px 16px;
+  }
+  
+  button:hover {
+    background-color: #ff7fff;
+    color: #fff;
+    cursor: pointer;
+  }
+
+
+
+.title{
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    text-align: center;
+    margin-top: 0;
+    font-weight: bold;
+    color: #666;
+}
+
+.home{
+    display: flex;
+    align-items: center;
+}
+
+.home .items{
+    min-width: 250px;
+}
+
+.home .info{
+    min-width: 500px;
+}
+
+.drink{
+    display: flex;
+    align-items: center;
+}
+
+.drink .items{
+    margin: 0 2px ;
+}
+
+.register{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
