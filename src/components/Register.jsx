@@ -6,8 +6,6 @@ import "../styles/style.css";
 const Register = () => {
     return (
         <>
-            <h1>Register</h1>
-
             <h1 className="title">登録 Register</h1>
             <div className="register">
                 <input
