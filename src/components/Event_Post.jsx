@@ -4,7 +4,8 @@ import { storage, db } from "../firebase";
 import firebase from "firebase/app";
 // Feed.jsからfirebaseのデータをPost.jsに流す（propsで渡すというイメージ）
 // propsを受け取りましょう！（つまり、このデータがわたってくるよ！っていうものを書いてあげる）
-const Post = ({ text, image, timestamp, postId }) => {
+const Event_Post = ({ date,event,image,text, timestamp, postId }) => {
+
   // 登録の処理
   // どう言うイメージ？？個別postId（id）に紐づくfirebaseの保存スペースに
   // 「comment」というデータのお部屋を作ります＝これがしたの<p></p>タグで書いているコメント一覧になります🤗
@@ -14,6 +15,8 @@ const Post = ({ text, image, timestamp, postId }) => {
   const [comments, setComments] = useState([
     {
       id: "",
+      date: "",
+      event: "",
       text: "",
       timestamp: null,
     },
@@ -26,7 +29,7 @@ const Post = ({ text, image, timestamp, postId }) => {
     // 全部にコメントが投稿されているかどうかでハンドリングしないといけない。というイメージです
 
     const firebaseData = db
-      .collection("posts")
+      .collection("events")
       // ポイントです！
       .doc(postId)
       .collection("comment")
@@ -50,7 +53,7 @@ const Post = ({ text, image, timestamp, postId }) => {
     // formタグを使う時、送信のtype=submitを使うとページがリロードされるので、リロードの処理を無効にする
     e.preventDefault();
     // firebaseのdbにアクセスをしてデータを登録。doc()これがポイント！
-    db.collection("posts").doc(postId).collection("comment").add({
+    db.collection("events").doc(postId).collection("comment").add({
       text: comment, //useStateの[comment]です
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
@@ -63,6 +66,14 @@ const Post = ({ text, image, timestamp, postId }) => {
     <>
       <div className="drink">
         <div className="items">
+
+          <div variant="body2" color="textSecondary" component="p" className="post_comment1">
+            {date}
+          </div>
+          <div variant="body2" color="textSecondary" component="p" className="post_comment1">
+            {event}
+          </div>
+          
           {/* 記述2. 画像を表示 imgタグを使って、imgのURLをsrc={xxx}に渡してあげる */}
           {/* 画像があるとき */}
           {image && <img src={image} alt="" className="post_image" />}
@@ -117,4 +128,4 @@ const Post = ({ text, image, timestamp, postId }) => {
   );
 };
 
-export default Post;
+export default Event_Post;

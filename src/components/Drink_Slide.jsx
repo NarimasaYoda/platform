@@ -17,8 +17,6 @@ import item003 from "./sub_images/item003.jpg";
 import item004 from "./sub_images/item004.jpg";
 import item005 from "./sub_images/item005.jpg";
 
-
-
 const useStyles = makeStyles(() => {
     const baseStyle = {
         padding: "1em",
@@ -87,7 +85,7 @@ const useStyles = makeStyles(() => {
     };
 });
 
-const Drink2_Slide = () => {
+const Drink_Slide = () => {
     const [swipeableActions, setSwipeableActions] = useState();
     const [tabIndex, setTabIndex] = useState(0);
     const classes = useStyles();
@@ -172,18 +170,7 @@ const Drink2_Slide = () => {
                     </div>
                 ))}
             </SwipeableViews>
-            <hr/>
-            <div>
-                <div className="drink">
-                    <div className="items">
-                        <p>SNS情報</p>
-                        <input type="text" />
-                        <button>投稿</button>
-                    </div>
-                </div>
-            </div>
-
         </>
     );
 };
-export default Drink2_Slide;
+export default Drink_Slide;

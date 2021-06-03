@@ -47,6 +47,7 @@ body {
 .drink{
     background-color: #fff66f;
     padding: 2px 0;
+    
 }
 
 .drink .items{
@@ -56,6 +57,23 @@ body {
     background-color: white;
     border-radius: 16px;
 }
+
+.drink .items .post_image{
+    max-height: 140px
+}
+
+.post_comment1{
+    font-size: 14px;
+}
+
+.post_comment2{
+    font-size: 13px;
+}
+
+.post_comment3{
+    font-size: 10px;
+}
+
 
 .register{
     display: flex;
