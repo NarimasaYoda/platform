@@ -64,7 +64,7 @@ const Event_Post = ({ date,event,image,text, timestamp, postId }) => {
 
   return (
     <>
-      <div className="drink">
+      <div className="event">
         <div className="items">
 
           <div variant="body2" color="textSecondary" component="p" className="post_comment1">

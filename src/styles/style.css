@@ -30,6 +30,19 @@ body {
     color: #666;
 }
 
+.post_comment1{
+    font-size: 14px;
+}
+
+.post_comment2{
+    font-size: 13px;
+}
+
+.post_comment3{
+    font-size: 10px;
+}
+
+/* home */
 .home{
     display: flex;
     align-items: center;
@@ -44,6 +57,7 @@ body {
     background-color: #fff66f;
 }
 
+/* drink */
 .drink{
     background-color: #fff66f;
     padding: 2px 0;
@@ -62,19 +76,7 @@ body {
     max-height: 140px
 }
 
-.post_comment1{
-    font-size: 14px;
-}
-
-.post_comment2{
-    font-size: 13px;
-}
-
-.post_comment3{
-    font-size: 10px;
-}
-
-
+/* register */
 .register{
     display: flex;
     flex-direction: column;
@@ -82,10 +84,20 @@ body {
     background-color: #fff66f;
 }
 
-/* .event 書くならここ */
+/* .event */
+.event{
+    background-color: #d5ffd4;
+    padding: 2px 0;
+}
 
 .event .items{
-    margin:0;
-    align-items: center;
-    background-color: #fff66f;
+    margin: 0 auto;
+    text-align: center;
+    width:70%;
+    background-color: white;
+    border-radius: 16px;
+}
+
+.event .items .post_image{
+    max-height: 100px
 }

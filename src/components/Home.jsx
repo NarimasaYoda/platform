@@ -24,6 +24,8 @@ const Home = () => {
             <hr />
             <p><Link to="/register">registerへ</Link></p>
             <p><Link to="/drink">drinkへ</Link></p>
+            <hr/>
+            <p><Link to="/test">testへ</Link></p>
         </>
     )
 }

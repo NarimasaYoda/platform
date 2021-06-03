@@ -15,6 +15,7 @@ const Event = () => {
             <hr />
             <div className="event">
                 <Event_TweetInput />
+                <hr/>
                 <Event_Feed />
             </div>
 

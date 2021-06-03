@@ -5,25 +5,20 @@ import { storage, db } from "../firebase";
 const Event_TweetInput = () => {
     // 画像を保持するためのuseState、入力された文字を保持するためのuseState
     const [inputImage, setInputImage] = useState(null);
-    const [message, setMessage] = useState("");
+    const [eventDate, setEventDate] = useState("");
+    const [eventTitle, setEventTitle] = useState("");
+    const [eventMessage, setEventMessage] = useState("");
 
     // ファイル選択して、画像を選ぶ。画像を保持する
     const onChangeImageHandler = (e) => {
-        console.log(e);
         if (e.target.files[0]) {
             setInputImage(e.target.files[0]);
             e.target.value = "";
         }
-
     };
 
     // 送信ボタンが押されたら（エンターが押されたら）送信の処理=firebaseにデータを登録する処理。
     const sendTweet = (e) => {
-
-        // useStateで保持した変数を確認
-        // console.log(message,"message");
-        // console.log(inputImage, "inputImage");
-
         e.preventDefault();
         if (inputImage) {
             // 画像 + テキストを登録させる。
@@ -48,7 +43,7 @@ const Event_TweetInput = () => {
                 () => { }, //進捗度合いを管理するもの、
                 (err) => {
                     //エラーに関する処理
-                    alert(err.message);
+                    alert(err.eventMessage);
                 },
                 async () => {
                     //成功したとき
@@ -58,10 +53,10 @@ const Event_TweetInput = () => {
                         .getDownloadURL()
                         .then(async (url) => {
                             await db.collection("events").add({
-                                date: "",
-                                event: "",
+                                date: eventDate,
+                                event: eventTitle,
                                 image: url,
-                                text: message,
+                                text: eventMessage,
                                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                             });
                         });
@@ -69,29 +64,45 @@ const Event_TweetInput = () => {
             );
         } else {
             db.collection("events").add({
-                date:"",
-                event: "",
+                date: eventDate,
+                event: eventTitle,
                 image: "",
-                text: message,
+                text: eventMessage,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });
         }
-        setMessage("");
-        // setInputImage("");
+        
+        setEventDate("");
+        setEventTitle("");
+        setEventMessage("");
     };
 
     return (
-        <div className="drink">
+        <div className="event">
             <form className="items" onSubmit={sendTweet}>
-                <div className="items2">
+                <div>
+                    <input
+                        type="date"
+                        // placeholder="イベント名 入力"
+                        autoFocus
+                        value={eventDate}
+                        onChange={(e) => setEventDate(e.target.value)}
+                    />
+
                     <input
                         type="text"
-                        placeholder="新規コメント入力"
+                        placeholder="イベント名 入力"
                         autoFocus
-                        value={message}
-                        // 入力された文字を取得するためにonChangeイベントを設定。直接setMessageで更新して書く方法の方が短縮化。
-                        onChange={(e) => setMessage(e.target.value)}
-                    // onChange={handleInputChange} ←同じような書き方
+                        value={eventTitle}
+                        onChange={(e) => setEventTitle(e.target.value)}
+                    />
+
+                    <input
+                        type="text"
+                        placeholder="コメント 入力"
+                        autoFocus
+                        value={eventMessage}
+                        onChange={(e) => setEventMessage(e.target.value)}
                     />
 
                 </div>
@@ -99,8 +110,8 @@ const Event_TweetInput = () => {
                     <input type="file" name="file" onChange={onChangeImageHandler} />
                 </div>
                 <div>
-                    <button type="submit" disabled={!message}>
-                        「コメント」or「コメント＆画像」の投稿
+                    <button type="submit" disabled={!eventMessage}>
+                        「イベント」or「イベント＆画像」の投稿
                     </button>
                 </div>
             </form>

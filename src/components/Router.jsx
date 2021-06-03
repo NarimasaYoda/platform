@@ -6,12 +6,15 @@ import Register from "./Register"
 import Drink from "./Drink"
 import Event from "./Event"
 
+import Test from "./Test"
+
 const Router = () => (
     <BrowserRouter>
         <Route exact path="/" component={Home} />
         <Route path="/register" component={Register} />
         <Route path="/drink" component={Drink} />
         <Route path="/event" component={Event} />
+        <Route path="/test" component={Test} />
         {/* <Route path="/blog/:id" component={Blog} /> */}
         {/* <Route path="/sum/" component={Sum0} /> */}
         {/* <Route path="/sum/:num1/:num2" component={Sum} /> */}
