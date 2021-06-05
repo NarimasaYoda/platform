@@ -2,19 +2,19 @@ import React, { useState } from "react";
 import firebase from "firebase/app";
 import { storage, db } from "../firebase";
 
-const Event_TweetInput = () => {
+const Drink_TweetInput = () => {
     // 画像を保持するためのuseState、入力された文字を保持するためのuseState
     const [inputImage, setInputImage] = useState(null);
-    const [eventDate, setEventDate] = useState("");
-    const [eventTitle, setEventTitle] = useState("");
-    const [eventMessage, setEventMessage] = useState("");
+    const [drinkMessage, setDrinkMessage] = useState("");
 
     // ファイル選択して、画像を選ぶ。画像を保持する
     const onChangeImageHandler = (e) => {
+        console.log(e);
         if (e.target.files[0]) {
             setInputImage(e.target.files[0]);
             e.target.value = "";
         }
+
     };
 
     // 送信ボタンが押されたら（エンターが押されたら）送信の処理=firebaseにデータを登録する処理。
@@ -26,8 +26,8 @@ const Event_TweetInput = () => {
             // そのためにファイル名をランダムなファイル名を作る必要がある、以下記述のとおり。
             const S =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; //ランダムな文字列を作るための候補、62文字
-            const N = 16; //16文字の文字列を作るという意味。生成したい文字数が16の文字列になる
-            const randomMoji = Array.from(crypto.getRandomValues(new Uint32Array(N))) //乱数を生成してくれるもので0からランダムな数字が16個選ばれる
+            const N = 16; //16文字の文字列を作るという意味。生成したい文字数が１６の文字列になる
+            const randomMoji = Array.from(crypto.getRandomValues(new Uint32Array(N))) //乱数を生成してくれるもので0からランダムな数字が１６こ選ばれる
                 .map((n) => S[n % S.length])
                 .join("");
             const fileName = randomMoji + "_" + inputImage.name;
@@ -40,10 +40,10 @@ const Event_TweetInput = () => {
                 // 3つ設定できる。進捗度合い = プログレス。エラーに関する = アップロードがうまくいかないなどのエラーを管理する。
                 // 成功した時 async（非同期＝何かを実行した後に次のことをするためのもの）
 
-                () => { }, //進捗度合いを管理するもの、
+                () => { }, //進捗度合いの管理するもの、
                 (err) => {
                     //エラーに関する処理
-                    alert(err.eventMessage);
+                    alert(err.message);
                 },
                 async () => {
                     //成功したとき
@@ -52,65 +52,43 @@ const Event_TweetInput = () => {
                         .child(fileName)
                         .getDownloadURL()
                         .then(async (url) => {
-                            await db.collection("events").add({
-                                date: eventDate,
-                                event: eventTitle,
+                            await db.collection("drinks").add({
                                 image: url,
-                                text: eventMessage,
+                                text: drinkMessage,
                                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                             });
                         });
                 }
             );
         } else {
-            db.collection("events").add({
-                date: eventDate,
-                event: eventTitle,
+            db.collection("drinks").add({
                 image: "",
-                text: eventMessage,
+                text: drinkMessage,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });
         }
-
-        setEventDate("");
-        setEventTitle("");
-        setEventMessage("");
+        setDrinkMessage("");
+        // setInputImage("");
     };
 
     return (
-        <div className="event">
+        <div className="drink">
             <form className="items" onSubmit={sendTweet}>
-                <div>
-                    <input
-                        type="date"
-                        autoFocus
-                        value={eventDate}
-                        onChange={(e) => setEventDate(e.target.value)}
-                    />
-
+                <div className="items2">
                     <input
                         type="text"
-                        placeholder="イベント名 入力"
+                        placeholder="新規コメント入力"
                         autoFocus
-                        value={eventTitle}
-                        onChange={(e) => setEventTitle(e.target.value)}
+                        value={drinkMessage}
+                        onChange={(e) => setDrinkMessage(e.target.value)}
                     />
-
-                    <input
-                        type="text"
-                        placeholder="コメント 入力"
-                        autoFocus
-                        value={eventMessage}
-                        onChange={(e) => setEventMessage(e.target.value)}
-                    />
-
                 </div>
                 <div className="items2">
                     <input type="file" name="file" onChange={onChangeImageHandler} />
                 </div>
                 <div>
-                    <button type="submit" disabled={!eventDate || !eventTitle || !eventMessage}>
-                        「イベント」or「イベント＆画像」の投稿
+                    <button type="submit" disabled={!drinkMessage}>
+                        「コメント」or「コメント＆画像」の投稿
                     </button>
                 </div>
             </form>
@@ -118,4 +96,4 @@ const Event_TweetInput = () => {
     );
 };
 
-export default Event_TweetInput;
+export default Drink_TweetInput;

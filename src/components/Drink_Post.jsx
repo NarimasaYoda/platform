@@ -2,15 +2,14 @@ import React, { useState, useEffect } from "react";
 import Img from "../images/test.png";
 import { storage, db } from "../firebase";
 import firebase from "firebase/app";
-// Feed.jsからfirebaseのデータをPost.jsに流す（propsで渡すというイメージ）
-// propsを受け取りましょう！（つまり、このデータがわたってくるよ！っていうものを書いてあげる）
-const Post = ({ text, image, timestamp, postId }) => {
+
+// Post（プロップスを受け取って表示する方）
+const Drink_Post = ({ id, text, image, timestamp, postId }) => {
+
   // 登録の処理
-  // どう言うイメージ？？個別postId（id）に紐づくfirebaseの保存スペースに
-  // 「comment」というデータのお部屋を作ります＝これがしたの<p></p>タグで書いているコメント一覧になります🤗
-  // コメントの入力欄のinputの文字列を保持したいのでuseStateを使いましょう
+  // 個別postId（id）に紐づくfirebaseの保存スペースに「comment」というデータ
   const [comment, setComment] = useState("");
-  // firebaseに登録されたデータを表示するためにデータを保持したいのでuseStateを使いましょう🤗
+  // firebaseに登録されたデータを表示するためにデータを保持したいのでuseStateを使用
   const [comments, setComments] = useState([
     {
       id: "",
@@ -26,7 +25,7 @@ const Post = ({ text, image, timestamp, postId }) => {
     // 全部にコメントが投稿されているかどうかでハンドリングしないといけない。というイメージです
 
     const firebaseData = db
-      .collection("posts")
+      .collection("drinks")
       // ポイントです！
       .doc(postId)
       .collection("comment")
@@ -50,7 +49,7 @@ const Post = ({ text, image, timestamp, postId }) => {
     // formタグを使う時、送信のtype=submitを使うとページがリロードされるので、リロードの処理を無効にする
     e.preventDefault();
     // firebaseのdbにアクセスをしてデータを登録。doc()これがポイント！
-    db.collection("posts").doc(postId).collection("comment").add({
+    db.collection("drinks").doc(postId).collection("comment").add({
       text: comment, //useStateの[comment]です
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
@@ -58,26 +57,27 @@ const Post = ({ text, image, timestamp, postId }) => {
     setComment("");
   };
 
+  const deleteData = () => {
+    db.collection("drinks").doc(id).delete();
+    storage.ref(`images/${image}`).delete();
+  }
 
   return (
     <>
       <div className="drink">
         <div className="items">
-          {/* 記述2. 画像を表示 imgタグを使って、imgのURLをsrc={xxx}に渡してあげる */}
-          {/* 画像があるとき */}
-          {image && <img src={image} alt="" className="post_image" />}
-          {/* 画像ない時 */}
-          {!image && <img src={Img} alt="" className="post_image" />}
-          {/*  */}
 
           <div variant="body2" color="textSecondary" component="p" className="post_comment1">
             {text}
           </div>
-
-          <div gutterBottom variant="h5" component="h2" className="post_comment1">
-            {new Date(timestamp?.toDate()).toLocaleString()}
+          <div className="post_comment3">
+            投稿：{new Date(timestamp?.toDate()).toLocaleString()}
+            <button onClick={deleteData}>削除</button>
           </div>
-
+          {/* 画像があるとき */}
+          {image && <img src={image} alt="" className="post_image" />}
+          {/* 画像ない時 */}
+          {!image && <img src={Img} alt="" className="post_image" />}
 
           <div>
             {/* firebaseのデータを取得、mapでデータを取得してレンダリングする */}
@@ -117,4 +117,4 @@ const Post = ({ text, image, timestamp, postId }) => {
   );
 };
 
-export default Post;
+export default Drink_Post;

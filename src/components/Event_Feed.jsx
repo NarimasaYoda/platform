@@ -2,18 +2,12 @@ import React, { useState, useEffect } from "react";
 import { db } from "../firebase";
 import Event_Post from "./Event_Post";
 
+// Feed（プロップスを渡す方）
 const Event_Feed = () => {
 
     //firebaseに作成（登録した）項目（データ）を受け取るために必要な箱＝useState
-    //useStateを記述してfirebaseに登録されているデータの項目と同じ構造にする（オブジェクト＝データの塊）
-    //データを受け取れるように{}で準備する
     const [posts, setPosts] = useState([{
-        // id: "",
-        // image: "",
-        // text: "",
-        // timestamp: null,
-
-        date:"",
+        date: "",
         event: "",
         image: "",
         text: "",
@@ -22,10 +16,7 @@ const Event_Feed = () => {
 
     //useEffectを使って、firebaseのデータを取得してuseStateで保持する
     useEffect(() => {
-        //Firebaseのデータもと、取得方法
-        //Firebaseに変更があったら感知する(Firebaseの機能)
-        //doc＝ドキュメント
-
+        //Firebaseのデータもと、取得方法。Firebaseに変更があったら感知する(Firebaseの機能)
         const firebaseData = db
             .collection('events')
             .orderBy('timestamp', 'desc')
@@ -35,7 +26,7 @@ const Event_Feed = () => {
                     //data()はfirebaseで指定されたコード記載方法
                     snapshot.docs.map((doc) => ({
                         id: doc.id,
-                        date:doc.data().date,
+                        date: doc.data().date,
                         event: doc.data().event,
                         image: doc.data().image,
                         text: doc.data().text,
@@ -54,8 +45,10 @@ const Event_Feed = () => {
                 //es6のmapを使うときは「mapを使って処理をしている箇所で」[key]の指定が必要です
                 //keyがあるとバーチャルドムのkeyが指定できる？
                 <Event_Post
-                    postId={postItem.id}
                     key={postItem.id}
+
+                    postId={postItem.id}
+                    id={postItem.id}
 
                     date={postItem.date}
                     event={postItem.event}

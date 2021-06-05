@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link } from "react-router-dom"
 import Drink_Slide from './Drink_Slide'
-import Feed from './Feed'
-import TweetInput from './TweetInput'
+import Feed from './Drink_Feed'
+import TweetInput from './Drink_TweetInput'
 
 const Drink = () => {
     return (

@@ -2,16 +2,14 @@ import React, { useState, useEffect } from "react";
 import Img from "../images/test.png";
 import { storage, db } from "../firebase";
 import firebase from "firebase/app";
-// Feed.jsからfirebaseのデータをPost.jsに流す（propsで渡すというイメージ）
-// propsを受け取りましょう！（つまり、このデータがわたってくるよ！っていうものを書いてあげる）
-const Event_Post = ({ date,event,image,text, timestamp, postId }) => {
+
+// Post（プロップスを受け取って表示する方）
+const Event_Post = ({ id, date, event, image, text, timestamp, postId }) => {
 
   // 登録の処理
-  // どう言うイメージ？？個別postId（id）に紐づくfirebaseの保存スペースに
-  // 「comment」というデータのお部屋を作ります＝これがしたの<p></p>タグで書いているコメント一覧になります🤗
-  // コメントの入力欄のinputの文字列を保持したいのでuseStateを使いましょう
+  // 個別postId（id）に紐づくfirebaseの保存スペースに「comment」というデータ
   const [comment, setComment] = useState("");
-  // firebaseに登録されたデータを表示するためにデータを保持したいのでuseStateを使いましょう🤗
+  // firebaseに登録されたデータを表示するためにデータを保持したいのでuseStateを使用
   const [comments, setComments] = useState([
     {
       id: "",
@@ -61,6 +59,11 @@ const Event_Post = ({ date,event,image,text, timestamp, postId }) => {
     setComment("");
   };
 
+  const deleteData = () => {
+    db.collection("events").doc(id).delete();
+    storage.ref(`images/${image}`).delete();
+  }
+
 
   return (
     <>
@@ -68,27 +71,24 @@ const Event_Post = ({ date,event,image,text, timestamp, postId }) => {
         <div className="items">
 
           <div variant="body2" color="textSecondary" component="p" className="post_comment1">
-            {date}
+            日時：{date}
           </div>
           <div variant="body2" color="textSecondary" component="p" className="post_comment1">
-            {event}
+            イベント：{event}
           </div>
-          
-          {/* 記述2. 画像を表示 imgタグを使って、imgのURLをsrc={xxx}に渡してあげる */}
+          <div className="post_comment3">
+            投稿：{new Date(timestamp?.toDate()).toLocaleString()}
+            <button onClick={deleteData}>削除</button>
+          </div>
+      
           {/* 画像があるとき */}
           {image && <img src={image} alt="" className="post_image" />}
           {/* 画像ない時 */}
           {!image && <img src={Img} alt="" className="post_image" />}
-          {/*  */}
 
           <div variant="body2" color="textSecondary" component="p" className="post_comment1">
-            {text}
+            メッセージ：{text}
           </div>
-
-          <div gutterBottom variant="h5" component="h2" className="post_comment1">
-            {new Date(timestamp?.toDate()).toLocaleString()}
-          </div>
-
 
           <div>
             {/* firebaseのデータを取得、mapでデータを取得してレンダリングする */}
@@ -106,7 +106,6 @@ const Event_Post = ({ date,event,image,text, timestamp, postId }) => {
               ))}
           </div>
 
-
           {/* formタグを設置して投稿ようの入力欄を作る */}
           <form onSubmit={handleAddNewComment}>
             <input
@@ -117,7 +116,7 @@ const Event_Post = ({ date,event,image,text, timestamp, postId }) => {
             />
             <button
               type="submit"
-              disabled={!comment} //コメントが空の時は押せないようにする
+              disabled={!comment}
             >
               コメントを投稿する
           </button>

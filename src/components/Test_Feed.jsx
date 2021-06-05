@@ -4,11 +4,9 @@ import Test_Post from "./Test_Post";
 
 const Test_Feed = () => {
 
-    //firebaseに作成（登録した）項目（データ）を受け取るために必要な箱＝useState
-    //useStateを記述してfirebaseに登録されているデータの項目と同じ構造にする（オブジェクト＝データの塊）
-    //データを受け取れるように{}で準備する
     const [fbData, setFbData] = useState([{
         text: "",
+        image: "",
     }]);
 
     useEffect(() => {
@@ -19,6 +17,7 @@ const Test_Feed = () => {
                     snapshot.docs.map((doc) => ({
                         id: doc.id,
                         text: doc.data().text,
+                        image: doc.data().image,
                     }))
                 )
             )
@@ -28,13 +27,10 @@ const Test_Feed = () => {
         <div>
             {fbData.map((data_a) => (
 
-                // {posts[0]?.id &&
-                //     posts.map((postItem) => (
-                //es6のmapを使うときは「mapを使って処理をしている箇所で」[key]の指定が必要です
-                //keyがあるとバーチャルドムのkeyが指定できる？
                 <Test_Post
-                    key={data_a.id}
+                    id={data_a.id}
                     text={data_a.text}
+                    image={data_a.image}
                 />
             ))}
         </div>
