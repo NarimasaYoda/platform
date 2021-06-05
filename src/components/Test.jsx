@@ -12,7 +12,7 @@ const Test = () => {
             <hr/>
             <Test1/>
             <hr/>
-            {/* <Test2/> */}
+            <Test2/>
             <hr/>
             
             <Test_TweetInput/>
