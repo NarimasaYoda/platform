@@ -50,10 +50,12 @@ body {
 
 .home .items{
     min-width: 250px;
+    min-height: 200px;
 }
 
 .home .info{
-    min-width: 500px;
+    min-width: 600px;
+    min-height: 200px;
     background-color: #fff66f;
 }
 
