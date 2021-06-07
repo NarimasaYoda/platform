@@ -46,15 +46,17 @@ body {
 .home{
     display: flex;
     align-items: center;
+    width: 500px;
+    margin: 0 auto;
 }
 
 .home .items{
-    min-width: 250px;
+    width: 25%;
     min-height: 200px;
 }
 
 .home .info{
-    min-width: 600px;
+    width: 75%;
     min-height: 200px;
     background-color: #fff66f;
 }
