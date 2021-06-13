@@ -24,9 +24,9 @@ const Home = () => {
             <div className="home">
                 <div className="items">
                     <p><Link to="/drink">飲みに行く</Link></p>
-                    <p><Link to="/register">登録</Link></p>
                     <p><Link to="/event">イベント情報</Link></p>
                     <p><Link to="/admin">管理者画面</Link></p>
+                    <p><Link to="/register">登録</Link></p>
                 </div>
 
                 <div className="info">
