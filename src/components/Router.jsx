@@ -5,7 +5,7 @@ import Home from "./Home"
 import Register from "./Register"
 import Drink from "./Drink"
 import Event from "./Event"
-
+import Admin from "./Admin"
 import Test from "./Test"
 
 const Router = () => (
@@ -14,6 +14,7 @@ const Router = () => (
         <Route path="/register" component={Register} />
         <Route path="/drink" component={Drink} />
         <Route path="/event" component={Event} />
+        <Route path="/admin" component={Admin} />
         <Route path="/test" component={Test} />
         {/* <Route path="/blog/:id" component={Blog} /> */}
         {/* <Route path="/sum/" component={Sum0} /> */}

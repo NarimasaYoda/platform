@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link } from "react-router-dom"
 import Drink_Slide from './Drink_Slide'
-import Feed from './Drink_Feed'
-import TweetInput from './Drink_TweetInput'
+import Drink_Feed from './Drink_Feed'
+import Drink_TweetInput from './Drink_TweetInput'
 
 const Drink = () => {
     return (
@@ -14,8 +14,8 @@ const Drink = () => {
             {/* <Drink2_Slide /> */}
             <Drink_Slide/>
             <hr/>
-            <TweetInput/>
-            <Feed/>
+            <Drink_TweetInput/>
+            <Drink_Feed/>
 
             
             <p><Link to="/">Homeへ</Link></p>
