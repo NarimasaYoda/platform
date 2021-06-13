@@ -14,11 +14,13 @@ const Event = () => {
 
             <hr />
             <div className="event">
-                <Event_TweetInput />
-                <hr/>
-                <Event_Feed />
-            </div>
-
+                <Event_TweetInput
+                    DB="events"
+                    STORAGE="images" />
+                <hr />
+                <Event_Feed
+                    DB="events"
+                    STORAGE="images" /></div>
             <hr />
             <p><Link to="/">Homeへ</Link></p>
         </>

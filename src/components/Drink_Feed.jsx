@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../firebase";
+import { storage, db } from "../firebase";
 import Drink_Post from "./Drink_Post";
 
 // Feed（プロップスを渡す方）
-const Drink_Feed = () => {
+const Drink_Feed = ({ DB, STORAGE }) => {
 
     //firebaseに作成（登録した）項目（データ）を受け取るために必要な箱＝useState
     const [posts, setPosts] = useState([{
         id: "",
+        date: "",
+        event: "",
         image: "",
+        image_name: "",
         text: "",
         timestamp: null,
     }]);
@@ -17,7 +20,7 @@ const Drink_Feed = () => {
     useEffect(() => {
         //Firebaseのデータもと、取得方法。Firebaseに変更があったら感知する(Firebaseの機能)
         const firebaseData = db
-            .collection('drinks')
+            .collection(DB)
             .orderBy('timestamp', 'desc')
 
             .onSnapshot((snapshot) =>
@@ -25,7 +28,10 @@ const Drink_Feed = () => {
                     //data()はfirebaseで指定されたコード記載方法
                     snapshot.docs.map((doc) => ({
                         id: doc.id,
+                        date: doc.data().date,
+                        event: doc.data().event,
                         image: doc.data().image,
+                        image_name: doc.data().image_name,
                         text: doc.data().text,
                         timestamp: doc.data().timestamp
                     }))
@@ -36,20 +42,20 @@ const Drink_Feed = () => {
     return (
         <div>
             {posts.map((postItem) => (
-
-                // {posts[0]?.id &&
-                //     posts.map((postItem) => (
-                //es6のmapを使うときは「mapを使って処理をしている箇所で」[key]の指定が必要です
-                //keyがあるとバーチャルドムのkeyが指定できる？
                 <Drink_Post
                     key={postItem.id}
 
-                    postId={postItem.id}
                     id={postItem.id}
 
+                    date={postItem.date}
+                    event={postItem.event}
                     image={postItem.image}
+                    image_name={postItem.image_name}
                     text={postItem.text}
                     timestamp={postItem.timestamp}
+
+                    DB={DB}
+                    STORAGE={STORAGE}
                 />
             ))}
         </div>

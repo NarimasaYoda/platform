@@ -92,7 +92,7 @@ const Drink_Slide = () => {
 
     const items = [item001, item002, item003, item004, item005];
     const itemInitial = ["G", "T", "T", "O", "Y"];
-    const itemNames = ["GTJZ", "Toshiya", "タナ", "大当たり", "夢亀"];
+    const itemNames = ["GTJZ", "Toshiya", "タナ", "大当", "夢亀"];
     const itemOfficialNames = [
         "後藤醸造",
         "寿矢",

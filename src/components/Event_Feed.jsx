@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../firebase";
+import { storage, db } from "../firebase";
 import Event_Post from "./Event_Post";
 
 // Feed（プロップスを渡す方）
-const Event_Feed = () => {
+const Event_Feed = ({ DB, STORAGE }) => {
 
     //firebaseに作成（登録した）項目（データ）を受け取るために必要な箱＝useState
     const [posts, setPosts] = useState([{
+        id: "",
         date: "",
         event: "",
         image: "",
+        image_name: "",
         text: "",
         timestamp: null,
     }]);
@@ -18,7 +20,7 @@ const Event_Feed = () => {
     useEffect(() => {
         //Firebaseのデータもと、取得方法。Firebaseに変更があったら感知する(Firebaseの機能)
         const firebaseData = db
-            .collection('events')
+            .collection(DB)
             .orderBy('timestamp', 'desc')
 
             .onSnapshot((snapshot) =>
@@ -29,6 +31,7 @@ const Event_Feed = () => {
                         date: doc.data().date,
                         event: doc.data().event,
                         image: doc.data().image,
+                        image_name: doc.data().image_name,
                         text: doc.data().text,
                         timestamp: doc.data().timestamp
                     }))
@@ -39,22 +42,20 @@ const Event_Feed = () => {
     return (
         <div>
             {posts.map((postItem) => (
-
-                // {posts[0]?.id &&
-                //     posts.map((postItem) => (
-                //es6のmapを使うときは「mapを使って処理をしている箇所で」[key]の指定が必要です
-                //keyがあるとバーチャルドムのkeyが指定できる？
                 <Event_Post
                     key={postItem.id}
 
-                    postId={postItem.id}
                     id={postItem.id}
 
                     date={postItem.date}
                     event={postItem.event}
                     image={postItem.image}
+                    image_name={postItem.image_name}
                     text={postItem.text}
                     timestamp={postItem.timestamp}
+
+                    DB={DB}
+                    STORAGE={STORAGE}
                 />
             ))}
         </div>

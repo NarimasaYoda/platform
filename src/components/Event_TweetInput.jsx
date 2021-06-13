@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import firebase from "firebase/app";
 import { storage, db } from "../firebase";
 
-const Event_TweetInput = () => {
+const Event_TweetInput = ({ DB, STORAGE }) => {
     // 画像を保持するためのuseState、入力された文字を保持するためのuseState
     const [inputImage, setInputImage] = useState(null);
     const [eventDate, setEventDate] = useState("");
@@ -32,7 +32,7 @@ const Event_TweetInput = () => {
                 .join("");
             const fileName = randomMoji + "_" + inputImage.name;
             // firebase storageに登録する処理
-            const uploadTweetImg = storage.ref(`images/${fileName}`).put(inputImage);
+            const uploadTweetImg = storage.ref(`${STORAGE}/${fileName}`).put(inputImage);
 
             // firebaseのDBに登録する処理
             uploadTweetImg.on(
@@ -48,14 +48,15 @@ const Event_TweetInput = () => {
                 async () => {
                     //成功したとき
                     await storage
-                        .ref("images")
+                        .ref(STORAGE)
                         .child(fileName)
                         .getDownloadURL()
                         .then(async (url) => {
-                            await db.collection("events").add({
+                            await db.collection(DB).add({
                                 date: eventDate,
                                 event: eventTitle,
                                 image: url,
+                                image_name: fileName,
                                 text: eventMessage,
                                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                             });
@@ -63,10 +64,11 @@ const Event_TweetInput = () => {
                 }
             );
         } else {
-            db.collection("events").add({
+            db.collection(DB).add({
                 date: eventDate,
                 event: eventTitle,
                 image: "",
+                image_name: "",
                 text: eventMessage,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });

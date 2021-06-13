@@ -2,27 +2,23 @@ import React, { useState } from "react";
 import firebase from "firebase/app";
 import { storage, db } from "../firebase";
 
-const Drink_TweetInput = () => {
+const Drink_TweetInput = ({ DB, STORAGE }) => {
     // 画像を保持するためのuseState、入力された文字を保持するためのuseState
     const [inputImage, setInputImage] = useState(null);
     const [drinkMessage, setDrinkMessage] = useState("");
 
     // ファイル選択して、画像を選ぶ。画像を保持する
     const onChangeImageHandler = (e) => {
-        console.log(e);
         if (e.target.files[0]) {
             setInputImage(e.target.files[0]);
             e.target.value = "";
         }
-
     };
 
-    // 送信ボタンが押されたら（エンターが押されたら）送信の処理=firebaseにデータを登録する処理。
     const sendTweet = (e) => {
         e.preventDefault();
         if (inputImage) {
-            // 画像 + テキストを登録させる。
-            // firebaseの仕様で同じファイル名の画像を複数回アップしてしまうと元々あったファイルが削除される
+            // 画像 + テキストを登録させる。firebaseの仕様で同じファイル名の画像を複数回アップしてしまうと元々あったファイルが削除される。
             // そのためにファイル名をランダムなファイル名を作る必要がある、以下記述のとおり。
             const S =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; //ランダムな文字列を作るための候補、62文字
@@ -32,7 +28,7 @@ const Drink_TweetInput = () => {
                 .join("");
             const fileName = randomMoji + "_" + inputImage.name;
             // firebase storageに登録する処理
-            const uploadTweetImg = storage.ref(`images/${fileName}`).put(inputImage);
+            const uploadTweetImg = storage.ref(`${STORAGE}/${fileName}`).put(inputImage);
 
             // firebaseのDBに登録する処理
             uploadTweetImg.on(
@@ -48,12 +44,13 @@ const Drink_TweetInput = () => {
                 async () => {
                     //成功したとき
                     await storage
-                        .ref("images")
+                        .ref(STORAGE)
                         .child(fileName)
                         .getDownloadURL()
                         .then(async (url) => {
-                            await db.collection("drinks").add({
+                            await db.collection(DB).add({
                                 image: url,
+                                image_name: fileName,
                                 text: drinkMessage,
                                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                             });
@@ -61,14 +58,14 @@ const Drink_TweetInput = () => {
                 }
             );
         } else {
-            db.collection("drinks").add({
+            db.collection(DB).add({
                 image: "",
+                image_name: "",
                 text: drinkMessage,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });
         }
         setDrinkMessage("");
-        // setInputImage("");
     };
 
     return (

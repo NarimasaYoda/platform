@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import firebase from "firebase/app";
 import { storage, db } from "../firebase";
 
-const Admin_InputImages = () => {
+const Admin_InputImages = ({ DB, STORAGE }) => {
     const [inputImage, setInputImage] = useState(null);
     const [comments, setComments] = useState("");
 
@@ -24,7 +24,7 @@ const Admin_InputImages = () => {
                 .join("");
             const fileName = randomMoji + "_" + inputImage.name;
 
-            const uploadTweetImg = storage.ref(`images_admin/${fileName}`).put(inputImage);
+            const uploadTweetImg = storage.ref(`${STORAGE}/${fileName}`).put(inputImage);
 
             uploadTweetImg.on(
                 firebase.storage.TaskEvent.STATE_CHANGED,
@@ -35,13 +35,13 @@ const Admin_InputImages = () => {
                 },
                 async () => {
                     await storage
-                        .ref("images_admin")
+                        .ref(STORAGE)
                         .child(fileName)
                         .getDownloadURL()
                         .then(async (url) => {
-                            await db.collection("homes").add({
+                            await db.collection(DB).add({
                                 image: url,
-                                image_name:fileName,
+                                image_name: fileName,
                                 text: comments,
                                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                             });
@@ -49,9 +49,9 @@ const Admin_InputImages = () => {
                 }
             );
         } else {
-            db.collection("homes").add({
+            db.collection(DB).add({
                 image: "",
-                image_name:"",
+                image_name: "",
                 text: comments,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });

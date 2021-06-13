@@ -7,10 +7,14 @@ const Admin = () => {
     return (
         <div>
             <p>Home画面の画像登録</p>
-            <Admin_InputImages/>
-            <hr/>
-            <Admin_Feed/>
             <p><Link to="/">Homeへ</Link></p>
+            <Admin_InputImages
+                DB="homes"
+                STORAGE="images_admin" />
+            <hr />
+            <Admin_Feed
+                DB="homes"
+                STORAGE="images_admin" />
         </div>
     )
 }

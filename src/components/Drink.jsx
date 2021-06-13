@@ -11,13 +11,16 @@ const Drink = () => {
             <hr />
             <button>新規の隠れ家</button>
 
-            {/* <Drink2_Slide /> */}
-            <Drink_Slide/>
-            <hr/>
-            <Drink_TweetInput/>
-            <Drink_Feed/>
+            <Drink_Slide />
+            <hr />
+            <Drink_TweetInput
+                DB="drinks"
+                STORAGE="images" />
+            <Drink_Feed
+                DB="drinks"
+                STORAGE="images" />
 
-            
+
             <p><Link to="/">Homeへ</Link></p>
         </>
     )

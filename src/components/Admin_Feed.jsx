@@ -3,10 +3,11 @@ import { db } from "../firebase";
 import Admin_Post from "./Admin_Post";
 
 // Feed（プロップスを渡す方）
-const Admin_Feed = () => {
+const Admin_Feed = ({ DB, STORAGE }) => {
 
     //firebaseに作成（登録した）項目（データ）を受け取るために必要な箱＝useState
     const [posts, setPosts] = useState([{
+        id:"",
         date: "",
         event: "",
         image: "",
@@ -19,7 +20,7 @@ const Admin_Feed = () => {
     useEffect(() => {
         //Firebaseのデータもと、取得方法。Firebaseに変更があったら感知する(Firebaseの機能)
         const firebaseData = db
-            .collection('homes')
+            .collection(DB)
             .orderBy('timestamp', 'desc')
 
             .onSnapshot((snapshot) =>
@@ -52,9 +53,9 @@ const Admin_Feed = () => {
                     text={postItem.text}
                     timestamp={postItem.timestamp}
 
-                    DB="homes"
-                    STORAGE="images_admin"
-                    />
+                    DB={DB}
+                    STORAGE={STORAGE}
+                />
             ))}
         </div>
     )
