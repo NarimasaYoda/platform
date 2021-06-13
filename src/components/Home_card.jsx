@@ -49,7 +49,7 @@ const Home_card = () => {
                 )}
             </div>
             {lastDirection ?
-                <h2 className='infoText'>You swiped {lastDirection}</h2>
+                <h2 className='infoText'>You swiped "{lastDirection}"</h2>
                 : <h2 className='infoText'>You swipe?</h2>}
         </div>
     )
