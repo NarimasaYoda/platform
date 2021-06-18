@@ -33,7 +33,7 @@ button:hover {
 .home{
     /* display: flex;
     align-items: center; */
-    width: 500px;
+    max-width: 500px;
     margin: 0 auto;
 }
 .home .items{
@@ -47,7 +47,7 @@ button:hover {
     background-color: #fff66f;
 }
 .home .items p{
-    margin: 0 7px;
+    margin: 0 10px;
 }
 .home .info{
     background-color: #fff66f;

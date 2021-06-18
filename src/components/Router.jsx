@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { BrowserRouter, Route, Link } from "react-router-dom"
 
 import Home from "./Home"
+import Login from "./Login"
+
 import Register from "./Register"
 import Drink from "./Drink"
 import Event from "./Event"
@@ -11,6 +13,8 @@ import Test from "./Test"
 const Router = () => (
     <BrowserRouter>
         <Route exact path="/" component={Home} />
+        <Route path="/login" component={Login} />
+
         <Route path="/register" component={Register} />
         <Route path="/drink" component={Drink} />
         <Route path="/event" component={Event} />

@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import firebase from "firebase/app";
-import { storage, db } from "../firebase";
+import { storage, db, auth } from "../firebase";
 
 const Event_TweetInput = ({ DB, STORAGE }) => {
+// const Event_TweetInput = (props) => {
+//     let DB = "events"
+//     let STORAGE = "images" //➁”props”と”DB””STORAGE”をプロップスで保持したい。
+
     // 画像を保持するためのuseState、入力された文字を保持するためのuseState
     const [inputImage, setInputImage] = useState(null);
     const [eventDate, setEventDate] = useState("");
     const [eventTitle, setEventTitle] = useState("");
     const [eventMessage, setEventMessage] = useState("");
+    const [loginFlag, setLoginFlag] = useState(true) //flagのTrue/False
 
     // ファイル選択して、画像を選ぶ。画像を保持する
     const onChangeImageHandler = (e) => {
@@ -17,8 +22,25 @@ const Event_TweetInput = ({ DB, STORAGE }) => {
         }
     };
 
+
+    // useEffect(() => {
+    //     // onAuthStateChanged→何らかのユーザー認証変化があったら実行される
+    //     // その際に[user]内に格納される＝空だったら何も起こらない→つまりログインされていない状態
+    //     const unSub = auth.onAuthStateChanged((user) => {
+    //         // あるときは user = true ,
+    //         // ないときは !user = false
+    //         // !user = falseとなる、つまりユーザーがログインしていない状態の時はログインページに飛ばす
+    //         !user && props.history.push("login");
+    //     });
+    //     return () => unSub();
+    // }, [loginFlag]); //※➀Flagが変化したときにuseEffect
+
+
+
     // 送信ボタンが押されたら（エンターが押されたら）送信の処理=firebaseにデータを登録する処理。
     const sendTweet = (e) => {
+        // setLoginFlag(!loginFlag); //※➀Flagを入れた
+
         e.preventDefault();
         if (inputImage) {
             // 画像 + テキストを登録させる。

@@ -1,23 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../firebase";
+import { storage, db } from "../firebase";
 import Test_Post from "./Test_Post";
 
-const Test_Feed = () => {
+// Feed（プロップスを渡す方）
+const Test_Feed = ({ DB, STORAGE }) => {
 
-    const [fbData, setFbData] = useState([{
-        text: "",
+    //firebaseに作成（登録した）項目（データ）を受け取るために必要な箱＝useState
+    const [posts, setPosts] = useState([{
+        id: "",
+        date: "",
+        event: "",
         image: "",
+        image_name: "",
+        text: "",
+        timestamp: null,
     }]);
 
+    //useEffectを使って、firebaseのデータを取得してuseStateで保持する
     useEffect(() => {
+        //Firebaseのデータもと、取得方法。Firebaseに変更があったら感知する(Firebaseの機能)
         const firebaseData = db
-            .collection('tests')
+            .collection(DB)
+            .orderBy('timestamp', 'desc')
+
             .onSnapshot((snapshot) =>
-                setFbData(
+                setPosts(
+                    //data()はfirebaseで指定されたコード記載方法
                     snapshot.docs.map((doc) => ({
                         id: doc.id,
-                        text: doc.data().text,
+                        date: doc.data().date,
+                        event: doc.data().event,
                         image: doc.data().image,
+                        image_name: doc.data().image_name,
+                        text: doc.data().text,
+                        timestamp: doc.data().timestamp
                     }))
                 )
             )
@@ -25,12 +41,21 @@ const Test_Feed = () => {
 
     return (
         <div>
-            {fbData.map((data_a) => (
-
+            {posts.map((postItem) => (
                 <Test_Post
-                    id={data_a.id}
-                    text={data_a.text}
-                    image={data_a.image}
+                    key={postItem.id}
+
+                    id={postItem.id}
+
+                    date={postItem.date}
+                    event={postItem.event}
+                    image={postItem.image}
+                    image_name={postItem.image_name}
+                    text={postItem.text}
+                    timestamp={postItem.timestamp}
+
+                    DB={DB}
+                    STORAGE={STORAGE}
                 />
             ))}
         </div>

@@ -16,6 +16,9 @@ import item002 from "./sub_images/item002.jpg";
 import item003 from "./sub_images/item003.jpg";
 import item004 from "./sub_images/item004.jpg";
 import item005 from "./sub_images/item005.jpg";
+import inu from "./sub_images/inu.png";
+import neko from "./sub_images/neko.png";
+import saru from "./sub_images/saru.png";
 
 const useStyles = makeStyles(() => {
     const baseStyle = {
@@ -85,9 +88,18 @@ const useStyles = makeStyles(() => {
     };
 });
 
-const Drink_Slide = () => {
+const Drink_Slide2 = () => {
     const [swipeableActions, setSwipeableActions] = useState();
     const [tabIndex, setTabIndex] = useState(0);
+    const [allItems, setAllItems] = useState([{
+        items: "",
+        itemInitial: "",
+        itemNames: "",
+        itemOfficialNames: "",
+        itemCategories: "",
+        contentTexts: "",
+        userImages: "",
+    }]);
 
     const classes = useStyles();
 
@@ -109,6 +121,25 @@ const Drink_Slide = () => {
         "いつも行列です。ランチ時の名店。福岡のソウルフードで取材あり。",
         "「ホームランラーメン」の絵本が魅力的。早い再開を願います。"
     ];
+    const userImages = [item001, item002, item003, item004, item005];
+
+    const newArr = {
+        items: items,
+        itemInitial: itemInitial,
+        itemNames: itemNames,
+        itemOfficialNames: itemOfficialNames,
+        itemCategories: itemCategories,
+        contentTexts: contentTexts,
+        userImages: userImages,
+    };
+
+    console.log(newArr, "newArr");
+
+    if(newArr.length<6){
+        setAllItems(newArr);
+    }
+
+    console.log(allItems, "allItmes");
 
     const handleChange = index => {
         setTabIndex(index);
@@ -165,6 +196,11 @@ const Drink_Slide = () => {
                                     {contentTexts[tabIndex]}
                                 </Typography>
                             </CardContent>
+                            <img
+                                alt={itemOfficialNames[tabIndex]}
+                                className={classes.image}
+                                src={item}
+                            />
                         </Card>
                     </div>
                 ))}
@@ -172,4 +208,4 @@ const Drink_Slide = () => {
         </>
     );
 };
-export default Drink_Slide;
+export default Drink_Slide2;
