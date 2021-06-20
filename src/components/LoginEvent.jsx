@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "../firebase";
-import { Link } from "react-router-dom"
 
-const Login = (props) => {
+const LoginEvent = (props) => {
     //ログイン状態の保持、メールの状態を保持、パスワードの状態を保持
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState("");
@@ -13,9 +12,9 @@ const Login = (props) => {
     // userに何かしらの情報が入っていればログインに成功、入っていなければログイン失敗、ログインしていないということ。
     useEffect(() => {
         const unSub = auth.onAuthStateChanged((user) => {
-            // 判定の条件は、何らかの情報が入っていた時、ルートの画面Appに遷移させる。
-            // 逆にいうと、userにない場合はこの画面にとどまり続ける。push("/") ログインしている人が到達するページ
-            user && props.history.push("/");
+            // 判定の条件は、何らかの情報が入っていた時、ルートの画面Appni遷移させる。
+            // 逆にいうと、userにない場合はこの画面にとどまり続ける。push("★") ログインしている人が到達するページ
+            user && props.history.push("event");
         });
         return () => unSub();
     }, [props.history]);
@@ -46,7 +45,7 @@ const Login = (props) => {
                                 // ログイン時 firebaseに[signInWithEmailAndPassword]というものがある。
                                 // それにemail, passwordで保持した状態を送り、成功すればhistoryによって画面遷移が実行される
                                 await auth.signInWithEmailAndPassword(email, password);
-                                props.history.push("/");
+                                props.history.push("event");
                                 // props.history.push("admin");
                             } catch (error) {
                                 // ログインできない、失敗したときはエラーで表示される
@@ -59,7 +58,7 @@ const Login = (props) => {
                                 // 登録時 firebaseに[createUserWithEmailAndPassword]というものがある。
                                 // それにemail, passwordで保持した状態を送り、成功すればhistoryによって画面遷移が実行される
                                 await auth.createUserWithEmailAndPassword(email, password);
-                                props.history.push("/");
+                                props.history.push("event");
                                 // props.history.push("admin");
                             } catch (error) {
                                 // ログインできない、失敗したときはエラーで表示される
@@ -79,4 +78,4 @@ const Login = (props) => {
         </div>
     );
 };
-export default Login;
+export default LoginEvent;

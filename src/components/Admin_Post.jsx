@@ -15,10 +15,10 @@ const Admin_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
     <>
       <div className="event">
         <div className="items">
-          <p className="post_comment1">
+          <p className="comment1">
             {date}/{event}/{text}
           </p>
-          <div className="post_comment3">
+          <div className="comment3">
             投稿：{new Date(timestamp?.toDate()).toLocaleString()}
             <button onClick={deleteData}>削除</button>
           </div>

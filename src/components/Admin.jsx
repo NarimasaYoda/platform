@@ -14,7 +14,7 @@ const Admin = (props) => {
             // あるときは user = true ,
             // ないときは !user = false
             // !user = falseとなる、つまりユーザーがログインしていない状態の時はログインページに飛ばす
-            !user && props.history.push("login");
+            !user && props.history.push("/login");
         });
         return () => unSub();
     }, []);
@@ -35,7 +35,7 @@ const Admin = (props) => {
                 管理者ログアウト
             </button>
 
-            <p><Link to="/">Homeへ</Link></p>
+            <Link to="/">Homeへ</Link>
             <Admin_InputImages
                 DB="homes"
                 STORAGE="images_admin" />

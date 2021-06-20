@@ -25,9 +25,14 @@ button:hover {
     font-weight: bold;
     color: #666;
 }
+
 .post_comment1{font-size: 14px}
+.comment1{font-size: 14px}
 .post_comment2{font-size: 13px}
+.comment2{font-size: 13px}
 .post_comment3{font-size: 9px}
+.comment3{font-size: 9px}
+
 
 /* home */
 .home{

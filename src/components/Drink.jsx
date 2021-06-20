@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from "react-router-dom"
 import Drink_Slide from './Drink_Slide'
 import Drink_Slide2 from './Drink_Slide2'
+import Drink_Slide3 from './Drink_Slide3'
 import Drink_Feed from './Drink_Feed'
 import Drink_TweetInput from './Drink_TweetInput'
 
@@ -13,7 +14,8 @@ const Drink = () => {
             {/* <button>新規の隠れ家</button> */}
 
             <Drink_Slide />
-            <Drink_Slide2/>
+            <Drink_Slide2 />
+            {/* <Drink_Slide3/> */}
             
             <hr />
             <Drink_TweetInput

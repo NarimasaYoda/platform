@@ -1,74 +1,83 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react'
+import { Link } from "react-router-dom"
 import firebase from "firebase/app";
-import { storage, db, auth } from "../firebase";
-import { useHistory } from 'react-router-dom';
-import ReactImageBase64 from "react-image-base64"
+import { storage, db, auth } from "../../firebase";
 
-const Event_TweetInput = ({ DB, STORAGE }) => {
+const EventTweet = (props) => {
+    useEffect(() => {
+        // onAuthStateChanged→何らかのユーザー認証変化があったら実行される
+        // その際に[user]内に格納される＝空だったら何も起こらない→つまりログインされていない状態
+        const unSub = auth.onAuthStateChanged((user) => {
+            // あるときは user = true ,
+            // ないときは !user = false
+            // !user = falseとなる、つまりユーザーがログインしていない状態の時はログインページに飛ばす
+            !user && props.history.push("login");
+        });
+        return () => unSub();
+    }, []);
+
+    let DB = "events"
+    let STORAGE = "images"
+
+    // const Event_TweetInput = (props) => {
+    //     let DB = "events"
+    //     let STORAGE = "images" //➁”props”と”DB””STORAGE”をプロップスで保持したい。
 
     // 画像を保持するためのuseState、入力された文字を保持するためのuseState
-    const [images, setImages] = useState({ data: [] });
+    const [inputImage, setInputImage] = useState(null);
     const [eventDate, setEventDate] = useState("");
     const [eventTitle, setEventTitle] = useState("");
     const [eventMessage, setEventMessage] = useState("");
+    const [loginFlag, setLoginFlag] = useState(true) //flagのTrue/False
 
-    const history = useHistory()
-    const loginUser = (e) => {
-        auth.onAuthStateChanged(user => {
-            // ログイン状態の場合、currentUserというステート（変数）にAPIから取得したuser情報を格納
-            // ログアウト状態の場合、ログインページ（loginEvent）へリダイレクト
-            !user && history.push("loginEvent");
-        });
-    }
+    // ファイル選択して、画像を選ぶ。画像を保持する
+    const onChangeImageHandler = (e) => {
+        if (e.target.files[0]) {
+            setInputImage(e.target.files[0]);
+            e.target.value = "";
+        }
+    };
+
+
+    // useEffect(() => {
+    //     // onAuthStateChanged→何らかのユーザー認証変化があったら実行される
+    //     // その際に[user]内に格納される＝空だったら何も起こらない→つまりログインされていない状態
+    //     const unSub = auth.onAuthStateChanged((user) => {
+    //         // あるときは user = true ,
+    //         // ないときは !user = false
+    //         // !user = falseとなる、つまりユーザーがログインしていない状態の時はログインページに飛ばす
+    //         !user && props.history.push("login");
+    //     });
+    //     return () => unSub();
+    // }, [loginFlag]); //※➀Flagが変化したときにuseEffect
+
+
+
     // 送信ボタンが押されたら（エンターが押されたら）送信の処理=firebaseにデータを登録する処理。
-    const sendTweet = async (e) => {
-        // console.log(e)
-        loginUser();
+    const sendTweet = (e) => {
+        // setLoginFlag(!loginFlag); //※➀Flagを入れた
+
         e.preventDefault();
-        if (images) {
+        if (inputImage) {
             // 画像 + テキストを登録させる。
             // firebaseの仕様で同じファイル名の画像を複数回アップしてしまうと元々あったファイルが削除される
             // そのためにファイル名をランダムなファイル名を作る必要がある、以下記述のとおり。
-            const image = images.data[0].fileData
             const S =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; //ランダムな文字列を作るための候補、62文字
             const N = 16; //16文字の文字列を作るという意味。生成したい文字数が16の文字列になる
             const randomMoji = Array.from(crypto.getRandomValues(new Uint32Array(N))) //乱数を生成してくれるもので0からランダムな数字が16個選ばれる
                 .map((n) => S[n % S.length])
                 .join("");
-            const fileName = randomMoji + "_" + image.name;
-
-            console.log(image)
-
-            // ******base64文字列（リサイズ後）をBlob形式のFileに変換する。******
-            const toBlob = (base64) => {
-                const bin = atob(base64.replace(/^.*,/, ''));
-                const buffer = new Uint8Array(bin.length);
-                for (let i = 0; i < bin.length; i++) {
-                    buffer[i] = bin.charCodeAt(i);
-                }
-                // Blobを作成
-                try {
-                    var blob = new Blob([buffer.buffer], {
-                        type: 'image/png'
-                    });
-                } catch (e) {
-                    return false;
-                }
-                return blob;
-            }
-            // ******************************************************************
-
-            // Blob形式のFileに変換後に、firebase storageに登録する処理
-            let blobData = toBlob(image)
-            const uploadTweetImg = storage.ref(`${STORAGE}/${fileName}`).put(blobData);
-
+            const fileName = randomMoji + "_" + inputImage.name;
+            // firebase storageに登録する処理
+            const uploadTweetImg = storage.ref(`${STORAGE}/${fileName}`).put(inputImage);
 
             // firebaseのDBに登録する処理
             uploadTweetImg.on(
                 firebase.storage.TaskEvent.STATE_CHANGED,
                 // 3つ設定できる。進捗度合い = プログレス。エラーに関する = アップロードがうまくいかないなどのエラーを管理する。
                 // 成功した時 async（非同期＝何かを実行した後に次のことをするためのもの）
+
                 () => { }, //進捗度合いを管理するもの、
                 (err) => {
                     //エラーに関する処理
@@ -89,16 +98,19 @@ const Event_TweetInput = ({ DB, STORAGE }) => {
                                 text: eventMessage,
                                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                             });
-
-                            setEventDate("");
-                            setEventTitle("");
-                            setEventMessage("");
-                            console.log(images);
-                            // setImages({ data: "" })
                         });
+
+                    setEventDate("");
+                    setEventTitle("");
+                    setEventMessage("");
+                    setInputImage("");
+
+                    window.location.href = '/event'
                 }
             );
         } else {
+
+
             db.collection(DB).add({
                 date: eventDate,
                 event: eventTitle,
@@ -111,16 +123,34 @@ const Event_TweetInput = ({ DB, STORAGE }) => {
             setEventDate("");
             setEventTitle("");
             setEventMessage("");
-        }
-    };
 
-    const clearImages = () => {
-        setImages({ data: [] })
-    }
+            window.location.href = '/event'
+
+        }
+
+
+
+        // window.location.href = '/event'
+    };
 
     return (
         <div className="event">
-            <form className="items">
+
+            <p>新規イベント情報登録</p>
+            <button
+                onClick={async () => {
+                    try {
+                        await auth.signOut();
+                        props.history.push("/event"); //ここでログアウトして飛ばしたいページに戻す
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                }}
+            >
+                ユーザログアウト
+            </button>
+
+            <form className="items" onSubmit={sendTweet}>
                 <div>
                     <input
                         type="date"
@@ -128,6 +158,7 @@ const Event_TweetInput = ({ DB, STORAGE }) => {
                         value={eventDate}
                         onChange={(e) => setEventDate(e.target.value)}
                     />
+
                     <input
                         type="text"
                         placeholder="イベント名 入力"
@@ -135,6 +166,7 @@ const Event_TweetInput = ({ DB, STORAGE }) => {
                         value={eventTitle}
                         onChange={(e) => setEventTitle(e.target.value)}
                     />
+
                     <input
                         type="text"
                         placeholder="コメント 入力"
@@ -142,49 +174,20 @@ const Event_TweetInput = ({ DB, STORAGE }) => {
                         value={eventMessage}
                         onChange={(e) => setEventMessage(e.target.value)}
                     />
-                
-                    <ReactImageBase64
-                        maxFileSize={10485760}
-                        thumbnail_size={200}
-                        // drop={true}
-                        // dropText="ファイルをドラッグ＆ドロップもしくは"
-                        // capture="environment"
-                        // multiple={true}
-                        handleChange={data => {
-                            if (data.result) {
-                                console.log(images, "imagesのこと")
-                                let list = images.data
-                                list.push(data);
-                                console.log(list, "listのこと")
-                                setImages({ data: list })
-                            } else {
-                                // setErrors([...errors, data.messages]);
-                            }
-                        }}
-                    />
-                </div>
-                <div>    
-                    {images.data.map((image, index) => (
-                         <img src={image.fileData} alt={"sugoi"} width={100} className="tweet_image" />
-                    ))}
-                </div>
 
+                </div>
+                <div className="items2">
+                    <input type="file" name="file" onChange={onChangeImageHandler} />
+                </div>
                 <div>
-                    <button type="button" disabled={!eventDate || !eventTitle || !eventMessage} onClick={sendTweet}>
+                    <button type="submit" disabled={!eventDate || !eventTitle || !eventMessage}>
                         「イベント」or「イベント＆画像」の投稿
                     </button>
                 </div>
-                
-                <div>
-                    <button type="button" onClick={clearImages}>
-                        {/* <button type="button" disabled={!(images==={ data: [] })} onClick={clearImages}> */}
-                        {/* //disableできない・・・。 */}
-                        投稿画像削除
-                    </button>
-                </div>
-
             </form>
         </div>
     );
 };
-export default Event_TweetInput;
+
+
+export default EventTweet

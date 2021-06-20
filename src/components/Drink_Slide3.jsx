@@ -96,7 +96,7 @@ const useStyles = makeStyles(() => {
     };
 });
 
-const Drink_Slide2 = () => {
+const Drink_Slide3 = () => {
     const [swipeableActions, setSwipeableActions] = useState();
     const [tabIndex, setTabIndex] = useState(0);
     const [allItems, setAllItems] = useState([{
@@ -113,7 +113,7 @@ const Drink_Slide2 = () => {
 
     const items = [item001, item002, item003, item004, item005];
     const itemInitial = ["G", "T", "T", "O", "Y"];
-
+    const itemNames = ["GTJZ", "Toshiya", "タナ", "大当", "夢亀"]; //★➀
     const itemOfficialNames = [
         "後藤醸造",
         "寿矢",
@@ -131,28 +131,28 @@ const Drink_Slide2 = () => {
     ];
     const userImages = [inu, neko, saru, saru, saru];
 
-    // const newArr = {
-    //     items_: items,
-    //     itemInitial_: itemInitial,
-    //     itemNames_: itemNames,
-    //     itemOfficialNames_: itemOfficialNames,
-    //     itemCategories_: itemCategories,
-    //     contentTexts_: contentTexts,
-    //     userImages_: userImages,
-    // };
+    const newArr = {
+        items: items,
+        itemInitial: itemInitial,
+        itemNames: itemNames,
+        itemOfficialNames: itemOfficialNames,
+        itemCategories: itemCategories,
+        contentTexts: contentTexts,
+        userImages: userImages,
+    };
 
-    const itemNames = ["GTJZ", "Toshiya", "タナ", "大当", "夢亀"]; //★➀
-    const newArr2 = { Name: itemNames };//★➁
+    // const newArr2 = { Name: itemNames };//★➁
 
     // console.log(newArr, "newArr");
-    console.log(itemNames, "itemNames");//★➀
-    console.log(newArr2, "newArr2");//★➁
+    // console.log(itemNames, "itemNames");//★➀
+    // console.log(newArr2, "newArr2");//★➁
 
-    // if (allItems.length < 7) {
-    //     setAllItems(newArr);
-    // }
+    if (allItems.length < 7) {
+        setAllItems(newArr);
+    }
 
-    // console.log(allItems, "allItems");
+    console.log(newArr, "newArr");
+    console.log(allItems, "allItems");
 
     // ************
     const handleChange = index => {
@@ -169,26 +169,19 @@ const Drink_Slide2 = () => {
                 variant="fullWidth"
                 indicatorColor="primary"
             >
-                {itemNames.map((aaa, index) => (  //★➀
+                {/* {itemNames.map((aaa, index) => (  //★➀
                     <Tab
                         className={tabIndex === index && classes[`active${index}`]}
                         label={aaa}
-                    />
-                ))}
-
-                {newArr2.Name.map((aaa, index) => (  //★➁-1
-                    <Tab
-                        className={tabIndex === index && classes[`active${index}`]}
-                        label={aaa}
-                    />
-                ))}
-
-                {/* {newArr2.map((aaa, index) => (  //★➁-2
-                    <Tab
-                        className={tabIndex === index && classes[`active${index}`]}
-                        label={aaa.Name}
                     />
                 ))} */}
+
+                {allItems.map((aaa, index) => (  //★➁
+                    <Tab
+                        className={tabIndex === index && classes[`active${index}`]}
+                        label={aaa.itemNames}
+                    />
+                ))}
 
             </Tabs>
 
@@ -239,4 +232,4 @@ const Drink_Slide2 = () => {
         </>
     );
 };
-export default Drink_Slide2;
+export default Drink_Slide3;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import firebase from "firebase/app";
-import { storage, db } from "../firebase";
+import { storage, db } from "../../firebase";
 import { useHistory } from 'react-router-dom';
 import ReactImageBase64 from "react-image-base64"
 
@@ -10,6 +10,60 @@ const Admin_InputImages = ({ DB, STORAGE }) => {
 
     const [inputImage, setInputImage] = useState(null);
     const [comments, setComments] = useState("");
+
+    const onChangeImageHandler = (e) => {
+        if (e.target.files[0]) {
+            setInputImage(e.target.files[0]);
+            e.target.value = "";
+        }
+    };
+
+    const sendTweet_ = (e) => {
+        e.preventDefault();
+        if (inputImage) {
+            const S =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; //ランダムな文字列を作るための候補、62文字
+            const N = 16; //16文字の文字列を作るという意味。生成したい文字数が16の文字列になる
+            const randomMoji = Array.from(crypto.getRandomValues(new Uint32Array(N))) //乱数を生成してくれるもので0からランダムな数字が16個選ばれる
+                .map((n) => S[n % S.length])
+                .join("");
+            const fileName = randomMoji + "_" + inputImage.name;
+
+            const uploadTweetImg = storage.ref(`${STORAGE}/${fileName}`).put(inputImage);
+
+            uploadTweetImg.on(
+                firebase.storage.TaskEvent.STATE_CHANGED,
+
+                () => { }, //進捗度合いを管理するもの、
+                (err) => {
+                    alert(err.comments);
+                },
+                async () => {
+                    await storage
+                        .ref(STORAGE)
+                        .child(fileName)
+                        .getDownloadURL()
+                        .then(async (url) => {
+                            await db.collection(DB).add({
+                                image: url,
+                                image_name: fileName,
+                                text: comments,
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                            });
+                        });
+                }
+            );
+        } else {
+            db.collection(DB).add({
+                image: "",
+                image_name: "",
+                text: comments,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+        }
+
+        setComments("");
+    };
 
     const sendTweet = async (e) => {
         e.preventDefault();
@@ -89,7 +143,7 @@ const Admin_InputImages = ({ DB, STORAGE }) => {
 
     return (
         <div className="event">
-            <form className="items">
+            <form className="items" onSubmit={sendTweet_}>
                 <div>
                     <input
                         type="text"
@@ -98,48 +152,15 @@ const Admin_InputImages = ({ DB, STORAGE }) => {
                         value={comments}
                         onChange={(e) => setComments(e.target.value)}
                     />
-
-                    <ReactImageBase64
-                        maxFileSize={10485760}
-                        thumbnail_size={1000}
-                        // drop={true}
-                        // dropText="ファイルをドラッグ＆ドロップもしくは"
-                        // capture="environment"
-                        // multiple={true}
-                        handleChange={data => {
-                            if (data.result) {
-                                console.log(images, "imagesのこと")
-                                let list = images.data
-                                list.push(data);
-                                console.log(list, "listのこと")
-                                setImages({ data: list })
-                            } else {
-                                // setErrors([...errors, data.messages]);
-                            }
-                        }}
-                    />
                 </div>
-
-                <div>
-                    {images.data.map((image, index) => (
-                        <img src={image.fileData} alt={"sugoi"} width={100} className="tweet_image" />
-                    ))}
+                <div className="items2">
+                    <input type="file" name="file" onChange={onChangeImageHandler} />
                 </div>
-
                 <div>
-                    <button type="button" disabled={!comments} onClick={sendTweet}>
+                    <button type="submit" disabled={!comments}>
                         「コメント＆画像」の投稿
                     </button>
                 </div>
-
-                <div>
-                    <button type="button" onClick={clearImages}>
-                        {/* <button type="button" disabled={!(images==={ data: [] })} onClick={clearImages}> */}
-                        {/* //disableできない・・・。 */}
-                        投稿画像削除
-                    </button>
-                </div>
-
             </form>
         </div>
     );
