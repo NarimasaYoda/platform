@@ -165,7 +165,7 @@ const Event_TweetInput = ({ DB, STORAGE }) => {
                 </div>
                 <div>    
                     {images.data.map((image, index) => (
-                         <img src={image.fileData} alt={"sugoi"} width={100} className="tweet_image" />
+                         <img src={image.fileData} alt={"sugoi"} width={70} className="tweet_image" />
                     ))}
                 </div>
 

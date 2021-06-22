@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Img from "../images/test.png";
-import { storage, db } from "../firebase";
 import firebase from "firebase/app";
+import { storage, db, auth } from "../firebase";
+import { useHistory } from 'react-router-dom';
+
+import Img from "../images/test.png";
 
 // Post（プロップスを受け取って表示する方）
 const Drink_Post = ({ key, id, date, event, image, image_name, text, timestamp, DB, STORAGE }) => {
@@ -17,6 +19,15 @@ const Drink_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
       timestamp: null,
     },
   ]);
+
+  const history = useHistory()
+  const loginUser = (e) => {
+      auth.onAuthStateChanged(user => {
+          // ログイン状態の場合、currentUserというステート（変数）にAPIから取得したuser情報を格納
+          // ログアウト状態の場合、ログインページ（loginEvent）へリダイレクト
+          !user && history.push("loginEvent");
+      });
+  }
 
   // useEffectを使って、Firebaseのデータを取得してuseStateで保持する
   useEffect(() => {
@@ -46,6 +57,7 @@ const Drink_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
 
   // 送信を押されたら登録の処理を実行させる記述
   const handleAddNewComment = (e) => {
+    loginUser();
     // formタグを使う時、送信のtype=submitを使うとページがリロードされるので、リロードの処理を無効にする
     e.preventDefault();
     // firebaseのdbにアクセスをしてデータを登録。doc()これがポイント！
@@ -58,6 +70,7 @@ const Drink_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
   };
 
   const deleteData = () => {
+    loginUser();
     db.collection(DB).doc(id).delete();
     storage.ref(`${STORAGE}/${image_name}`).delete();
   }
@@ -66,8 +79,8 @@ const Drink_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
     <>
       <div className="drink">
         <div className="items">
-          <p className="post_comment1">{text}</p>
-          <p className="post_comment3">
+          <p className="comment1">{text}</p>
+          <p className="comment3">
             投稿：{new Date(timestamp?.toDate()).toLocaleString()}
             <button onClick={deleteData}>削除</button>
           </p>
@@ -80,10 +93,10 @@ const Drink_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
             {comments &&
               comments.map((comment) => (
                 <p>
-                  <span className="post_comment3">
+                  <span className="comment3">
                     {new Date(comment.timestamp?.toDate()).toLocaleString()}<span> : </span>
                   </span>
-                  <span className="post_comment2">
+                  <span className="comment2">
                     {comment.text}
                   </span>
                 </p>

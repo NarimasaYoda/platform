@@ -50,7 +50,6 @@ const useStyles = makeStyles(() => {
             ...baseStyle,
             backgroundColor: "#60bce4"
         },
-
         image: {
             margin: "0 0 0 70px",
             height: "150px"

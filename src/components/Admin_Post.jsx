@@ -4,7 +4,8 @@ import { storage, db } from "../firebase";
 // import GridList from "@material-ui/core/GridList";
 
 // Post（プロップスを受け取って表示する方）
-const Admin_Post = ({ key, id, date, event, image, image_name, text, timestamp, DB, STORAGE }) => {
+const Admin_Post = ({ key, id, date, event, image, image_name, text, tag_name,
+  item_initial, item_fullName, item_comment, timestamp, DB, STORAGE }) => {
 
   const deleteData = () => {
     db.collection(DB).doc(id).delete();
@@ -16,7 +17,7 @@ const Admin_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
       <div className="event">
         <div className="items">
           <p className="comment1">
-            {date}/{event}/{text}
+            {text}/{tag_name}/{item_initial}/{item_fullName}/{item_comment}
           </p>
           <div className="comment3">
             投稿：{new Date(timestamp?.toDate()).toLocaleString()}

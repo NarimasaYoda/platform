@@ -1,48 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import firebase from "firebase/app";
-import { storage, db, auth } from "../firebase";
+import { storage, db } from "../firebase";
 import { useHistory } from 'react-router-dom';
 import ReactImageBase64 from "react-image-base64"
 
-const Drink_TweetInput = ({ DB, STORAGE }) => {
-    // 画像を保持するためのuseState、入力された文字を保持するためのuseState
+const Admin_InputPubs = ({ DB, STORAGE }) => {
+
     const [images, setImages] = useState({ data: [] });
-    const [drinkMessage, setDrinkMessage] = useState("");
+    
+    const [tagName, setTagName] = useState("");
+    const [itemInitial, setItemInitial] = useState("");
+    const [itemFullName, setItemFullName] = useState("");
+    const [itemComment, setItemComment] = useState("");
+    const [comments, setComments] = useState("");
 
-    const history = useHistory()
-    const loginUser = (e) => {
-        auth.onAuthStateChanged(user => {
-            // ログイン状態の場合、currentUserというステート（変数）にAPIから取得したuser情報を格納
-            // ログアウト状態の場合、ログインページ（loginEvent）へリダイレクト
-            !user && history.push("loginDrink");
-        });
-    }
-
-
-    //***** */ ファイル選択して、画像を選ぶ。画像を保持する
-    // const onChangeImageHandler = (e) => {
-    //     if (e.target.files[0]) {
-    //         setInputImage(e.target.files[0]);
-    //         e.target.value = "";
-    //     }
-    // };
 
     const sendTweet = async (e) => {
-        loginUser();
         e.preventDefault();
         if (images) {
-            // 画像 + テキストを登録させる。firebaseの仕様で同じファイル名の画像を複数回アップしてしまうと元々あったファイルが削除される。
-            // そのためにファイル名をランダムなファイル名を作る必要がある、以下記述のとおり。
             const image = images.data[0].fileData
             const S =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; //ランダムな文字列を作るための候補、62文字
-            const N = 16; //16文字の文字列を作るという意味。生成したい文字数が１６の文字列になる
-            const randomMoji = Array.from(crypto.getRandomValues(new Uint32Array(N))) //乱数を生成してくれるもので0からランダムな数字が１６こ選ばれる
+            const N = 16; //16文字の文字列を作るという意味。生成したい文字数が16の文字列になる
+            const randomMoji = Array.from(crypto.getRandomValues(new Uint32Array(N))) //乱数を生成してくれるもので0からランダムな数字が16個選ばれる
                 .map((n) => S[n % S.length])
                 .join("");
-            const fileName = randomMoji + "_" + image.name;
+            const fileName = randomMoji + "_" + Image.name;
 
-            console.log(image)
+            console.log(image);
 
             // ******base64文字列（リサイズ後）をBlob形式のFileに変換する。******
             const toBlob = (base64) => {
@@ -67,19 +52,14 @@ const Drink_TweetInput = ({ DB, STORAGE }) => {
             let blobData = toBlob(image)
             const uploadTweetImg = storage.ref(`${STORAGE}/${fileName}`).put(blobData);
 
-            // firebaseのDBに登録する処理
             uploadTweetImg.on(
                 firebase.storage.TaskEvent.STATE_CHANGED,
-                // 3つ設定できる。進捗度合い = プログレス。エラーに関する = アップロードがうまくいかないなどのエラーを管理する。
-                // 成功した時 async（非同期＝何かを実行した後に次のことをするためのもの）
 
-                () => { }, //進捗度合いの管理するもの、
+                () => { }, //進捗度合いを管理するもの、
                 (err) => {
-                    //エラーに関する処理
-                    alert(err.message);
+                    alert(err.comments);
                 },
                 async () => {
-                    //成功したとき
                     await storage
                         .ref(STORAGE)
                         .child(fileName)
@@ -88,11 +68,19 @@ const Drink_TweetInput = ({ DB, STORAGE }) => {
                             await db.collection(DB).add({
                                 image: url,
                                 image_name: fileName,
-                                text: drinkMessage,
+                                text: comments,
+
+                                tag_name:tagName,
+                                item_initial:itemInitial,
+                                item_fullName:itemFullName,
+                                item_comment:itemComment,
                                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                             });
-
-                            setDrinkMessage("");
+                            setTagName("");
+                            setItemInitial("");
+                            setItemFullName("");
+                            setItemComment("");
+                            setComments("");
                             console.log(images);
                         });
                 }
@@ -101,10 +89,19 @@ const Drink_TweetInput = ({ DB, STORAGE }) => {
             db.collection(DB).add({
                 image: "",
                 image_name: "",
-                text: drinkMessage,
+                text: comments,
+
+                tag_name:tagName,
+                item_initial:itemInitial,
+                item_fullName:itemFullName,
+                item_comment:itemComment,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });
-            setDrinkMessage("");
+            setTagName("");
+            setItemInitial("");
+            setItemFullName("");
+            setItemComment("");
+            setComments("");
         }
     };
 
@@ -113,20 +110,48 @@ const Drink_TweetInput = ({ DB, STORAGE }) => {
     }
 
     return (
-        <div className="drink">
+        <div className="event">
             <form className="items">
-                <div className="items2">
+                <div>
                     <input
                         type="text"
-                        placeholder="新規コメント入力"
+                        placeholder="例：GTJZ"
                         autoFocus
-                        value={drinkMessage}
-                        onChange={(e) => setDrinkMessage(e.target.value)}
+                        value={tagName}
+                        onChange={(e) => setTagName(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="例：G（イニシャル）"
+                        autoFocus
+                        value={itemInitial}
+                        onChange={(e) => setItemInitial(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="例：後藤醸造"
+                        autoFocus
+                        value={itemFullName}
+                        onChange={(e) => setItemFullName(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="例：立ち飲み"
+                        autoFocus
+                        value={itemComment}
+                        onChange={(e) => setItemComment(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="例：東京農大出身のご夫婦が作るクラフトビール"
+                        autoFocus
+                        value={comments}
+                        onChange={(e) => setComments(e.target.value)}
                     />
 
                     <ReactImageBase64
                         maxFileSize={10485760}
-                        thumbnail_size={200}
+                        thumbnail_size={1000}
                         // drop={true}
                         // dropText="ファイルをドラッグ＆ドロップもしくは"
                         // capture="environment"
@@ -145,21 +170,17 @@ const Drink_TweetInput = ({ DB, STORAGE }) => {
                     />
                 </div>
 
-                <div>    
+                <div>
                     {images.data.map((image, index) => (
-                         <img src={image.fileData} alt={"sugoi"} width={70} className="tweet_image" />
+                        <img src={image.fileData} alt={"sugoi"} width={100} className="tweet_image" />
                     ))}
                 </div>
 
                 <div>
-                    <button type="button" disabled={!drinkMessage} onClick={sendTweet}>
-                        「コメント」or「コメント＆画像」の投稿
+                    <button type="button" disabled={!tagName&&!itemInitial&&!itemFullName&&!itemComment&&!comments} onClick={sendTweet}>
+                        「コメント＆画像」の投稿
                     </button>
                 </div>
-
-                {/* <div className="items2">
-                    <input type="file" name="file" onChange={onChangeImageHandler} />
-                </div> */}
 
                 <div>
                     <button type="button" onClick={clearImages}>
@@ -169,14 +190,9 @@ const Drink_TweetInput = ({ DB, STORAGE }) => {
                     </button>
                 </div>
 
-                {/* <div>
-                    <button type="submit" disabled={!drinkMessage}>
-                        「コメント」or「コメント＆画像」の投稿
-                    </button>
-                </div> */}
             </form>
         </div>
     );
 };
 
-export default Drink_TweetInput;
+export default Admin_InputPubs;

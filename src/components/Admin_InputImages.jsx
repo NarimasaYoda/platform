@@ -7,8 +7,6 @@ import ReactImageBase64 from "react-image-base64"
 const Admin_InputImages = ({ DB, STORAGE }) => {
 
     const [images, setImages] = useState({ data: [] });
-
-    const [inputImage, setInputImage] = useState(null);
     const [comments, setComments] = useState("");
 
     const sendTweet = async (e) => {

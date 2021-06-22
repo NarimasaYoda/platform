@@ -3,9 +3,9 @@ import { Link } from "react-router-dom"
 import { db, auth } from "../firebase";
 
 import Admin_Feed from './Admin_Feed'
-import Admin_InputImages from './Admin_InputImages'
+import Admin_InputPubs from './Admin_InputPubs'
 
-const Admin = (props) => {
+const AdminDrink = (props) => {
     useEffect(() => {
         // onAuthStateChanged→何らかのユーザー認証変化があったら実行される
         // その際に[user]内に格納される＝空だったら何も起こらない→つまりログインされていない状態
@@ -20,7 +20,7 @@ const Admin = (props) => {
 
     return (
         <div>
-            <p>Home画面の画像登録</p>
+            <p>Drink画面のお店情報登録</p>
             <button
                 onClick={async () => {
                     try {
@@ -33,19 +33,20 @@ const Admin = (props) => {
             >
                 管理者ログアウト
             </button>
-            <Link to="/AdminDrink">AdminDrinkへ</Link> 
+            <Link to="/Admin">Adminへ</Link> 
             
             <span>  </span>
+
             <Link to="/">Homeへ</Link>
-            <Admin_InputImages
-                DB="homes"
-                STORAGE="images_admin" />
+            <Admin_InputPubs
+                DB="pubs"
+                STORAGE="images_pubs" />
             <hr />
             <Admin_Feed
-                DB="homes"
-                STORAGE="images_admin" />
+                DB="pubs"
+                STORAGE="images_pubs" />
         </div>
     )
 }
 
-export default Admin
+export default AdminDrink

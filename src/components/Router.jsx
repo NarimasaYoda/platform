@@ -4,12 +4,14 @@ import { BrowserRouter, Route, Link } from "react-router-dom"
 import Home from "./Home"
 import Login from "./Login"
 import LoginEvent from "./LoginEvent"
+import LoginDrink from "./LoginDrink"
 
 // import Register from "./Register"
 import Drink from "./Drink"
 import Event from "./Event"
 // import EventTweet from "./EventTweet"
 import Admin from "./Admin"
+import AdminDrink from "./AdminDrink"
 import Test from "./Test"
 
 const Router = () => (
@@ -17,12 +19,14 @@ const Router = () => (
         <Route exact path="/" component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/loginEvent" component={LoginEvent} />
+        <Route path="/loginDrink" component={LoginDrink} />
 
         {/* <Route path="/register" component={Register} /> */}
         <Route path="/drink" component={Drink} />
         <Route path="/event" component={Event} />
         {/* <Route path="/eventTweet" component={EventTweet} /> */}
         <Route path="/admin" component={Admin} />
+        <Route path="/adminDrink" component={AdminDrink} />
         <Route path="/test" component={Test} />
         {/* <Route path="/blog/:id" component={Blog} /> */}
         {/* <Route path="/sum/" component={Sum0} /> */}

@@ -176,12 +176,12 @@ const Drink_Slide2 = () => {
                     />
                 ))}
 
-                {newArr2.Name.map((aaa, index) => (  //★➁-1
+                {/* {newArr2.Name.map((aaa, index) => (  //★➁-1
                     <Tab
                         className={tabIndex === index && classes[`active${index}`]}
                         label={aaa}
                     />
-                ))}
+                ))} */}
 
                 {/* {newArr2.map((aaa, index) => (  //★➁-2
                     <Tab
