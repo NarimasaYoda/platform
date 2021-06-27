@@ -126,8 +126,6 @@ const Drink_Slide = ({ DB, STORAGE }) => {
             )
     }, []); //最初に一度Firebaseにアクセスすることを意味する
 
-    
-
     const [swipeableActions, setSwipeableActions] = useState();
     const [tabIndex, setTabIndex] = useState(0);
 
@@ -191,8 +189,6 @@ const Drink_Slide = ({ DB, STORAGE }) => {
                                     id={postItem.id}
                                     DB={DB}
                                     STORAGE={STORAGE} />
-
-                                
 
                             </CardContent>
                         </Card>

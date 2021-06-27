@@ -12,7 +12,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 
-import Drink_Modal from './Drink_Modal'
+import Test_Modal from './Test_Modal'
 
 const useStyles = makeStyles(() => {
     const baseStyle = {
@@ -126,14 +126,12 @@ const Drink_Slide = ({ DB, STORAGE }) => {
             )
     }, []); //最初に一度Firebaseにアクセスすることを意味する
 
-    
-
     const [swipeableActions, setSwipeableActions] = useState();
     const [tabIndex, setTabIndex] = useState(0);
 
     const classes = useStyles();
 
-    const handleChange = index => {setTabIndex(index)};
+    const handleChange = index => { setTabIndex(index) };
 
     return (
         <>
@@ -187,12 +185,10 @@ const Drink_Slide = ({ DB, STORAGE }) => {
                                     {postItem.text}
                                 </Typography>
 
-                                <Drink_Modal
+                                <Test_Modal
                                     id={postItem.id}
                                     DB={DB}
                                     STORAGE={STORAGE} />
-
-                                
 
                             </CardContent>
                         </Card>

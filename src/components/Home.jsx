@@ -1,11 +1,12 @@
 import React from 'react'
 import { Link } from "react-router-dom"
+import { storage, db, auth } from "../firebase";
 // import TinderCard from 'react-tinder-card'
 
 import "../styles/style.css";
 import Home_card from './Home_card';
 
-const Home = () => {
+const Home = (props) => {
 
     const onSwipe = (direction) => {
         console.log('You swiped: ' + direction)
@@ -33,6 +34,19 @@ const Home = () => {
             </div>
 
             <hr />
+            <button
+                onClick={async () => {
+                    try {
+                        await auth.signOut();
+                        props.history.push("login"); //ここでログアウトして飛ばしたいページに戻す
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                }}
+            >
+                ユーザログアウト
+            </button>
+            <p><Link to="/login">loginへ</Link></p>
             <p><Link to="/test">testへ</Link></p>
         </>
     )
