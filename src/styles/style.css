@@ -177,6 +177,12 @@ button:hover {
     height: 40px;
 }
 
+.imairu .items .post_image:hover {
+    transform:scale(1.1,1.1);
+    transition:0.4s all;
+}
+
+
 /* .event */
 .event{
     background-color: #d5ffd4;

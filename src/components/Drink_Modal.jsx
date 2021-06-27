@@ -200,7 +200,7 @@ const Drink_Modal = ({ id, DB, STORAGE, uid }) => {
             </div>
 
             <div>
-                <button type="button" disabled={!idName} onClick={sendNewTweet}>
+                <button type="button" onClick={sendNewTweet}>
                     「今いる！」の投稿
                 </button>
             </div>

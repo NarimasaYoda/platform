@@ -1,34 +1,9 @@
 import React, { useState, useEffect } from "react";
 // import firebase from "firebase/app";
 import { storage, db, auth } from "../firebase";
-import { useHistory } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
+// import { useHistory } from 'react-router-dom';
 
 import Img from "../images/test.png";
-
-// ************************************
-const getModalStyle = () => {
-    const top = 50;
-    const left = 50;
-    return {
-        top: `${top}%`,
-        left: `${left}%`,
-        transform: `translate(-${top}%, -${left}%)`,
-    };
-}
-
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        position: 'absolute',
-        width: 600,
-        backgroundColor: theme.palette.background.paper,
-        border: '2px solid #000',
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
-    },
-}));
-// ************************************
 
 // Post（プロップスを受け取って表示する方）
 const Drink_Now = ({ key, id, DB, STORAGE }) => {
@@ -42,10 +17,6 @@ const Drink_Now = ({ key, id, DB, STORAGE }) => {
         text: "",
         timestamp: null,
     },]);
-
-    const classes = useStyles();
-    const [modalStyle] = useState(getModalStyle);
-    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         if (!id) return false;  //追記 全部にコメントが投稿されているかどうかでハンドリングしないといけない。
@@ -75,32 +46,28 @@ const Drink_Now = ({ key, id, DB, STORAGE }) => {
         };
     }, [id]);
 
-    const history = useHistory()
-    const loginUser = (e) => {
-        auth.onAuthStateChanged(user => {
-            // ログイン状態の場合、currentUserというステート（変数）にAPIから取得したuser情報を格納
-            // ログアウト状態の場合、ログインページ（loginEvent）へリダイレクト
-            !user && history.push("loginDrink");
-        });
+    const func_a = () => {
+        console.log("aaa")
     }
 
-    const windowOpenFunc = () => {
-        console.log("aaa")
-        loginUser();
-        setOpen(true);
-    }
 
     return (
+        <>
         <div className="imairu">
             {imairuInfo && imairuInfo.map((info) => (
                 <div className="items">
                     {/* 画像があるとき */}
-                    {info.image && <img src={info.image} alt="" className="post_image" onClick={() =>windowOpenFunc()}/>}
+                    {info.image && <img src={info.image} alt="" className="post_image" />}
                     {/* 画像ない時 */}
-                    {!info.image && <img src={Img} alt="" className="post_image" onClick={() =>windowOpenFunc()}/>}
+                    {!info.image && <img src={Img} alt="" className="post_image" />}
+
+                    {<img src={Img} alt="" className="post_image" onClick={() =>func_a()}/>}
                 </div>
+                
             ))}
         </div>
+        
+        </>
     );
 };
 

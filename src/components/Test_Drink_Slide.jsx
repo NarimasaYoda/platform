@@ -12,8 +12,8 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 
-import Test_Modal from './Test_Modal'
-// import Drink_Now from './Drink_Now'
+import Drink_Modal from './Drink_Modal'
+import Drink_Now from './Test_Drink_Now'
 
 const useStyles = makeStyles(() => {
     const baseStyle = {
@@ -82,7 +82,7 @@ const useStyles = makeStyles(() => {
     };
 });
 
-const Drink_Slide = ({ DB, STORAGE }) => {
+const Drink_Slide = ({ DB, STORAGE, uid }) => {
 
     const [posts, setPosts] = useState([{
         id: "",
@@ -126,6 +126,8 @@ const Drink_Slide = ({ DB, STORAGE }) => {
                 )
             )
     }, []); //最初に一度Firebaseにアクセスすることを意味する
+
+
 
     const [swipeableActions, setSwipeableActions] = useState();
     const [tabIndex, setTabIndex] = useState(0);
@@ -186,14 +188,17 @@ const Drink_Slide = ({ DB, STORAGE }) => {
                                     {postItem.text}
                                 </Typography>
 
-                                <Test_Modal
+                                <Drink_Modal
                                     id={postItem.id}
                                     DB={DB}
-                                    STORAGE={STORAGE} />
-                                {/* <Drink_Now
+                                    STORAGE={STORAGE}
+                                    uid={uid} />
+
+                                <Drink_Now
                                     id={postItem.id}
                                     DB="pubs"
-                                    STORAGE="image_pubs" /> */}
+                                    STORAGE="image_pubs"
+                                />
 
                             </CardContent>
                         </Card>

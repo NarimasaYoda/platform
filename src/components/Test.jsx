@@ -6,7 +6,7 @@ import Test_Feed from './Test_Feed'
 import Test_TweetInput from './Test_TweetInput'
 // import Test_TweetInput_1 from './Test_TweetInput_1'
 // import Slide_Feed from './old/Slide_Feed'
-import Test_Drink_Slide from './Test_Drink_Slide'
+import Drink_Slide from './Test_Drink_Slide'
 // import Test_Modal from './Test_Modal'
 // import Drink_Now from './Drink_Now'
 
@@ -30,7 +30,7 @@ const Test = () => {
                 DB="pubs"
                 STORAGE="image_pubs"
             /> */}
-            <Test_Drink_Slide
+            <Drink_Slide
                 DB="pubs"
                 STORAGE="image_pubs"
             />
