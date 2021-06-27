@@ -153,6 +153,7 @@ const Drink_Modal = ({ id, DB, STORAGE, uid }) => {
 
     const body = (
         <div style={modalStyle} className={classes.paper}>
+            {uid}
             <div className="items2">
                 <input
                     type="text"
@@ -170,7 +171,7 @@ const Drink_Modal = ({ id, DB, STORAGE, uid }) => {
                 />
 
 
-                <br /><p>今日の後ろ姿 : </p>
+                <br /><p>今日の後ろ姿を投稿！ : </p>
                 <ReactImageBase64
                     maxFileSize={10485760}
                     thumbnail_size={50}
