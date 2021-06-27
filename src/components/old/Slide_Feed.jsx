@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../../firebase";
-import Slide_Post from "./Test_Slide_Post";
+import Slide_Post from "../Test_Slide_Post";
 
 // Feed（プロップスを渡す方）
 const Slide_Feed = ({ DB, STORAGE }) => {

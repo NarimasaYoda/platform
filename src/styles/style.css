@@ -166,12 +166,15 @@ button:hover {
     max-height: 140px
 }
 
-/* register */
-.register{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #fff66f;
+/* imairu */
+.imairu .items{
+    display: inline-block; 
+}
+
+.imairu .items .post_image{
+    border-radius: 50%;
+    width:  40px;
+    height: 40px;
 }
 
 /* .event */

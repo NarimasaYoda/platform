@@ -13,6 +13,7 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 
 import Drink_Modal from './Drink_Modal'
+import Drink_Now from './Drink_Now'
 
 const useStyles = makeStyles(() => {
     const baseStyle = {
@@ -193,7 +194,11 @@ const Drink_Slide = ({ DB, STORAGE, uid }) => {
                                     STORAGE={STORAGE}
                                     uid={uid} />
 
-
+                                <Drink_Now
+                                    id={postItem.id}
+                                    DB="pubs"
+                                    STORAGE="image_pubs"
+                                />
 
                             </CardContent>
                         </Card>
