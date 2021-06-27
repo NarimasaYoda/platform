@@ -12,7 +12,7 @@ const Login = (props) => {
     const [nickname, setNickname] = useState("");
     const [images, setImages] = useState({ data: [] });
     const [currentUser, setCurrentUser] = useState("")
-    const [isAuthChg,setIsAuthChg]=useState(true)
+    const [isAuthChg, setIsAuthChg] = useState(true)
 
     const DB = "users"
     const STORAGE = "images_users"
@@ -103,6 +103,7 @@ const Login = (props) => {
                                     image: url,
                                     image_name: fileName,
                                     nickname: nickname,
+                                    admin:0,
                                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                 });
                             setCurrentUser("");
@@ -118,6 +119,7 @@ const Login = (props) => {
                 image: "",
                 image_name: "",
                 nickname: nickname,
+                admin:0,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });
             setCurrentUser("");
@@ -200,7 +202,7 @@ const Login = (props) => {
                                 // 登録時 firebaseに[createUserWithEmailAndPassword]というものがある。
                                 // それにemail, passwordで保持した状態を送り、成功すればhistoryによって画面遷移が実行される
                                 await auth.createUserWithEmailAndPassword(email, password);
-                                
+
                                 { setUserInfo() } //★特にここが怪しい。firebaseのAuthで、IDを作って、「uidができた」のちに、アイコン画像を格納したい。
 
                                 // props.history.push("/");
