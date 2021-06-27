@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Drink_Modal = ({ id, DB, STORAGE }) => {
+const Drink_Modal = ({ id, DB, STORAGE, uid }) => {
     const classes = useStyles();
     // getModalStyle is not a pure function, we roll the style only on the first render
     const [modalStyle] = useState(getModalStyle);
@@ -39,6 +39,7 @@ const Drink_Modal = ({ id, DB, STORAGE }) => {
     const [comment, setComment] = useState("");
 
     const handleOpen = () => {
+        loginUser();
         setOpen(true);
     };
 
@@ -62,7 +63,6 @@ const Drink_Modal = ({ id, DB, STORAGE }) => {
     }
 
     const sendNewTweet = async (e) => {
-        loginUser();
         e.preventDefault();
         if (images) {
             // 画像 + テキストを登録させる。firebaseの仕様で同じファイル名の画像を複数回アップしてしまうと元々あったファイルが削除される。
@@ -123,6 +123,7 @@ const Drink_Modal = ({ id, DB, STORAGE }) => {
                                     id_name: idName,
                                     image: url,
                                     image_name: fileName,
+                                    uid: uid,
                                     text: comment,
                                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                 });
@@ -138,6 +139,7 @@ const Drink_Modal = ({ id, DB, STORAGE }) => {
                 id_name: idName,
                 image: "",
                 image_name: "",
+                uid: uid,
                 text: comment,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });
@@ -167,8 +169,8 @@ const Drink_Modal = ({ id, DB, STORAGE }) => {
                     onChange={(e) => setComment(e.target.value)}
                 />
 
-                
-                <br/><p>今日の後ろ姿 : </p>
+
+                <br /><p>今日の後ろ姿 : </p>
                 <ReactImageBase64
                     maxFileSize={10485760}
                     thumbnail_size={50}

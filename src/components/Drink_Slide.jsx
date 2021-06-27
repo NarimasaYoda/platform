@@ -81,7 +81,7 @@ const useStyles = makeStyles(() => {
     };
 });
 
-const Drink_Slide = ({ DB, STORAGE }) => {
+const Drink_Slide = ({ DB, STORAGE, uid }) => {
 
     const [posts, setPosts] = useState([{
         id: "",
@@ -126,14 +126,14 @@ const Drink_Slide = ({ DB, STORAGE }) => {
             )
     }, []); //最初に一度Firebaseにアクセスすることを意味する
 
-    
+
 
     const [swipeableActions, setSwipeableActions] = useState();
     const [tabIndex, setTabIndex] = useState(0);
 
     const classes = useStyles();
 
-    const handleChange = index => {setTabIndex(index)};
+    const handleChange = index => { setTabIndex(index) };
 
     return (
         <>
@@ -190,9 +190,10 @@ const Drink_Slide = ({ DB, STORAGE }) => {
                                 <Drink_Modal
                                     id={postItem.id}
                                     DB={DB}
-                                    STORAGE={STORAGE} />
+                                    STORAGE={STORAGE}
+                                    uid={uid} />
 
-                                
+
 
                             </CardContent>
                         </Card>
