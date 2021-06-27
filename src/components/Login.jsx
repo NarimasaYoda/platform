@@ -103,7 +103,7 @@ const Login = (props) => {
                                     image: url,
                                     image_name: fileName,
                                     nickname: nickname,
-                                    admin:0,
+                                    admin:0, //★admin 0 or 1
                                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                 });
                             setCurrentUser("");
@@ -119,7 +119,7 @@ const Login = (props) => {
                 image: "",
                 image_name: "",
                 nickname: nickname,
-                admin:0,
+                admin:0, //★admin 0 or 1
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });
             setCurrentUser("");
