@@ -8,25 +8,22 @@ import Img from "../images/test.png";
 // Post（プロップスを受け取って表示する方）
 const Drink_Post = ({ key, id, date, event, image, image_name, text, timestamp, DB, STORAGE }) => {
 
-  // 登録の処理
-  // 個別idに紐づくfirebaseの保存スペースに「comment」というデータ
+  // firebaseの保存スペースに「comment」というデータをセット
   const [comment, setComment] = useState("");
   // firebaseに登録されたデータを表示するためにデータを保持したいのでuseStateを使用
-  const [comments, setComments] = useState([
-    {
-      id: "",
-      text: "",
-      timestamp: null,
-    },
-  ]);
+  const [comments, setComments] = useState([{
+    id: "",
+    text: "",
+    timestamp: null,
+  },]);
 
   const history = useHistory()
   const loginUser = (e) => {
-      auth.onAuthStateChanged(user => {
-          // ログイン状態の場合、currentUserというステート（変数）にAPIから取得したuser情報を格納
-          // ログアウト状態の場合、ログインページ（loginEvent）へリダイレクト
-          !user && history.push("loginEvent");
-      });
+    auth.onAuthStateChanged(user => {
+      // ログイン状態の場合、currentUserというステート（変数）にAPIから取得したuser情報を格納
+      // ログアウト状態の場合、ログインページ（loginEvent）へリダイレクト
+      !user && history.push("loginDrink");
+    });
   }
 
   // useEffectを使って、Firebaseのデータを取得してuseStateで保持する
@@ -58,8 +55,7 @@ const Drink_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
   // 送信を押されたら登録の処理を実行させる記述
   const handleAddNewComment = (e) => {
     loginUser();
-    // formタグを使う時、送信のtype=submitを使うとページがリロードされるので、リロードの処理を無効にする
-    e.preventDefault();
+    // e.preventDefault();// formタグを使う時、送信のtype=submitを使うとページがリロードされるので、リロードの処理を無効にする
     // firebaseのdbにアクセスをしてデータを登録。doc()これがポイント！
     db.collection(DB).doc(id).collection("comment").add({
       text: comment, //useStateの[comment]です
@@ -105,7 +101,6 @@ const Drink_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
 
 
           {/* formタグでコメント入力欄 */}
-          <form onSubmit={handleAddNewComment}>
             <input
               type="text"
               placeholder="コメント入力"
@@ -113,12 +108,11 @@ const Drink_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
               onChange={(e) => setComment(e.target.value)}
             />
             <button
-              type="submit"
-              disabled={!comment} //コメントが空の時は押せないようにする
-            >
+              type="button"
+              disabled={!comment}
+              onClick={handleAddNewComment}>
               コメントを投稿する
-          </button>
-          </form>
+            </button>
         </div>
       </div>
     </>

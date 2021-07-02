@@ -3,13 +3,11 @@ import { BrowserRouter, Route, Link } from "react-router-dom"
 
 import Home from "./Home"
 import Login from "./Login"
-import LoginEvent from "./LoginEvent"
-import LoginDrink from "./LoginDrink"
 
-// import Register from "./Register"
+
 import Drink from "./Drink"
 import Event from "./Event"
-// import EventTweet from "./EventTweet"
+
 import Admin from "./Admin"
 import AdminDrink from "./AdminDrink"
 import Test from "./Test"
@@ -17,14 +15,15 @@ import Test from "./Test"
 const Router = () => (
     <BrowserRouter>
         <Route exact path="/" component={Home} />
-        <Route path="/login" component={Login} />
-        <Route path="/loginEvent" component={LoginEvent} />
-        <Route path="/loginDrink" component={LoginDrink} />
+        <Route path="/login" render={() => <Login JumpTo="/" />} />
+        <Route path="/loginEvent" render={() => <Login JumpTo="event" />} />
+        <Route path="/loginDrink" render={() => <Login JumpTo="drink" />} />
+
 
         {/* <Route path="/register" component={Register} /> */}
         <Route path="/drink" component={Drink} />
         <Route path="/event" component={Event} />
-        {/* <Route path="/eventTweet" component={EventTweet} /> */}
+    
         <Route path="/admin" component={Admin} />
         <Route path="/adminDrink" component={AdminDrink} />
         <Route path="/test" component={Test} />

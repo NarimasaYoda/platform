@@ -4,6 +4,8 @@ import { storage, db, auth } from "../firebase";
 import { useHistory } from 'react-router-dom';
 import ReactImageBase64 from "react-image-base64"
 
+import { toBlobFunction } from "./Function/Functions"
+
 const Event_TweetInput = ({ DB, STORAGE }) => {
 
     // 画像を保持するためのuseState、入力された文字を保持するためのuseState
@@ -24,10 +26,9 @@ const Event_TweetInput = ({ DB, STORAGE }) => {
     const sendTweet = async (e) => {
         // console.log(e)
         loginUser();
-        e.preventDefault();
-        if (images) {
-            // 画像 + テキストを登録させる。
-            // firebaseの仕様で同じファイル名の画像を複数回アップしてしまうと元々あったファイルが削除される
+        // e.preventDefault();// formタグを使う時、送信のtype=submitを使うとページがリロードされるので、リロードの処理を無効にする
+        if (images.data.length > 0) {
+            // 画像 + テキストを登録させる。firebaseの仕様で同じファイル名の画像を複数回アップしてしまうと元々あったファイルが削除される。
             // そのためにファイル名をランダムなファイル名を作る必要がある、以下記述のとおり。
             const image = images.data[0].fileData
             const S =
@@ -38,31 +39,9 @@ const Event_TweetInput = ({ DB, STORAGE }) => {
                 .join("");
             const fileName = randomMoji + "_" + image.name;
 
-            console.log(image)
-
-            // ******base64文字列（リサイズ後）をBlob形式のFileに変換する。******
-            const toBlob = (base64) => {
-                const bin = atob(base64.replace(/^.*,/, ''));
-                const buffer = new Uint8Array(bin.length);
-                for (let i = 0; i < bin.length; i++) {
-                    buffer[i] = bin.charCodeAt(i);
-                }
-                // Blobを作成
-                try {
-                    var blob = new Blob([buffer.buffer], {
-                        type: 'image/png'
-                    });
-                } catch (e) {
-                    return false;
-                }
-                return blob;
-            }
-            // ******************************************************************
-
             // Blob形式のFileに変換後に、firebase storageに登録する処理
-            let blobData = toBlob(image)
+            let blobData = toBlobFunction(image)
             const uploadTweetImg = storage.ref(`${STORAGE}/${fileName}`).put(blobData);
-
 
             // firebaseのDBに登録する処理
             uploadTweetImg.on(
@@ -93,8 +72,8 @@ const Event_TweetInput = ({ DB, STORAGE }) => {
                             setEventDate("");
                             setEventTitle("");
                             setEventMessage("");
-                            console.log(images);
-                            // setImages({ data: "" })
+                            setImages({ data: [] }); 
+                            document.querySelector('#js-image-base64').value = '';
                         });
                 }
             );
@@ -111,16 +90,13 @@ const Event_TweetInput = ({ DB, STORAGE }) => {
             setEventDate("");
             setEventTitle("");
             setEventMessage("");
+            setImages({ data: [] });
         }
     };
 
-    const clearImages = () => {
-        setImages({ data: [] })
-    }
-
     return (
         <div className="event">
-            <form className="items">
+            <div className="items">
                 <div>
                     <input
                         type="date"
@@ -174,16 +150,7 @@ const Event_TweetInput = ({ DB, STORAGE }) => {
                         「イベント」or「イベント＆画像」の投稿
                     </button>
                 </div>
-                
-                <div>
-                    <button type="button" onClick={clearImages}>
-                        {/* <button type="button" disabled={!(images==={ data: [] })} onClick={clearImages}> */}
-                        {/* //disableできない・・・。 */}
-                        投稿画像削除
-                    </button>
-                </div>
-
-            </form>
+            </div>
         </div>
     );
 };

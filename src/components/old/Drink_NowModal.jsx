@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 // import firebase from "firebase/app";
-import { storage, db, auth } from "../firebase";
+import { storage, db, auth } from "../../firebase";
 // import { useHistory } from 'react-router-dom';
 
 import Img from "../images/test.png";

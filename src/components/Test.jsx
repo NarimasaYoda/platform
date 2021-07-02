@@ -9,6 +9,7 @@ import Test_TweetInput from './Test_TweetInput'
 import Drink_Slide from './Test_Drink_Slide'
 // import Test_Modal from './Test_Modal'
 // import Drink_Now from './Drink_Now'
+// import Rcv_func from './sub_function/Rcv_func'
 
 
 const Test = () => {
@@ -40,7 +41,7 @@ const Test = () => {
                 DB="pubs"
                 STORAGE="image_pubs"
             /> */}
-
+            {/* <Rcv_func/> */}
 
         </div>
     )

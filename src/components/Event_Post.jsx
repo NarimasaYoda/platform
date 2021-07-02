@@ -31,8 +31,7 @@ const Event_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
       });
   }
 
-  // useEffect
-  // 記述2.useEffectを使って、Firebaseのデータを取得してuseStateで保持する
+  // useEffectを使って、Firebaseのデータを取得してuseStateで保持する
   useEffect(() => {
 
     if (!id) return false;  //追記★
@@ -61,8 +60,7 @@ const Event_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
   // 送信を押されたら登録の処理を実行させる記述
   const handleAddNewComment = (e) => {
     loginUser();
-    // formタグを使う時、送信のtype=submitを使うとページがリロードされるので、リロードの処理を無効にする
-    e.preventDefault();
+    e.preventDefault();// formタグを使う時、送信のtype=submitを使うとページがリロードされるので、リロードの処理を無効にする
     // firebaseのdbにアクセスをしてデータを登録。doc()これがポイント！
     db.collection(DB).doc(id).collection("comment").add({
       text: comment, //useStateの[comment]です
@@ -112,7 +110,6 @@ const Event_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
           </div>
 
           {/* formタグを設置して投稿ようの入力欄を作る */}
-          <form onSubmit={handleAddNewComment}>
             <input
               type="text"
               placeholder="コメントを記述"
@@ -120,12 +117,11 @@ const Event_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
               onChange={(e) => setComment(e.target.value)}
             />
             <button
-              type="submit"
+              type="button"
               disabled={!comment}
-            >
+              onClick={handleAddNewComment}>
               コメントを投稿する
           </button>
-          </form>
         </div>
       </div>
     </>

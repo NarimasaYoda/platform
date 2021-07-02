@@ -1,21 +1,43 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { auth } from "../firebase";
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 
 import Event_TweetInput from "./Event_TweetInput"
 import Event_Feed from "./Event_Feed"
 
-const Event = (props) => {
+const Event = () => {
+    const [currentUser, setCurrentUser] = useState("")
+
+    useEffect(() => {
+        auth.onAuthStateChanged(user => {
+            if (user === null) {
+                setCurrentUser("")
+            } else {
+                setCurrentUser(user);
+            }
+        });
+    }, [])
+
+    console.log(currentUser, "currentUser")
+
+    const history = useHistory()
+
+    const moveToLogin = () => {
+        history.push("/loginEvent")
+    }
+
     return (
         <>
             <h1 className="title">イベント Information</h1>
             <hr />
-            <p className="comment3">イベント投稿時にはユーザ登録が必要です</p>
+            <p className="comment3">投稿時にはユーザ登録が必要です</p>
+
+            <button onClick={()=>moveToLogin()}>ユーザログイン</button>
             <button
                 onClick={async () => {
                     try {
                         await auth.signOut();
-                        props.history.push("/"); //ここでログアウトして飛ばしたいページに戻す
+                        history.push("/"); //ここでログアウトして飛ばしたいページに戻す
                     } catch (error) {
                         alert(error.message);
                     }

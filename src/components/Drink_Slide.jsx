@@ -82,7 +82,7 @@ const useStyles = makeStyles(() => {
     };
 });
 
-const Drink_Slide = ({ DB, STORAGE, uid }) => {
+const Drink_Slide = ({ DB, STORAGE, STORAGE2, uid }) => {
 
     const [posts, setPosts] = useState([{
         id: "",
@@ -192,13 +192,15 @@ const Drink_Slide = ({ DB, STORAGE, uid }) => {
                                     id={postItem.id}
                                     DB={DB}
                                     STORAGE={STORAGE}
+                                    STORAGE2={STORAGE2}
                                     uid={uid} />
 
                                 <Drink_Now
                                     id={postItem.id}
-                                    DB="pubs"
-                                    STORAGE="image_pubs"
-                                />
+                                    DB={DB}
+                                    STORAGE={STORAGE}
+                                    STORAGE2={STORAGE2}
+                                    uid={uid}/>
 
                             </CardContent>
                         </Card>

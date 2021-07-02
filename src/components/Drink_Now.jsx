@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import firebase from "firebase/app";
+import firebase from "firebase/app";
 import { storage, db, auth } from "../firebase";
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 // ************************************
 
 // Post（プロップスを受け取って表示する方）
-const Drink_Now = ({ key, id, DB, STORAGE }) => {
+const Drink_Now = ({ key, id, DB, STORAGE, STORAGE2 }) => {
 
     const [imairuInfo, setImairuInfo] = useState([{
         id: "",
@@ -85,19 +85,19 @@ const Drink_Now = ({ key, id, DB, STORAGE }) => {
     }
 
     const windowOpenFunc = () => {
-        console.log("aaa")
+        console.log("img","this.name")
         loginUser();
         setOpen(true);
     }
 
     return (
         <div className="imairu">
-            {imairuInfo && imairuInfo.map((info) => (
+            {imairuInfo && imairuInfo.map((info,index) => (
                 <div className="items">
                     {/* 画像があるとき */}
-                    {info.image && <img src={info.image} alt="" className="post_image" onClick={() =>windowOpenFunc()}/>}
+                    {info.image && <img src={info.image} alt="" className="post_image" name={info.id} onClick={() => windowOpenFunc()} />}
                     {/* 画像ない時 */}
-                    {!info.image && <img src={Img} alt="" className="post_image" onClick={() =>windowOpenFunc()}/>}
+                    {!info.image && <img src={Img} alt="" className="post_image" name={info.id} onClick={() => windowOpenFunc()} />}
                 </div>
             ))}
         </div>

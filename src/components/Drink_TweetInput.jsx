@@ -4,6 +4,8 @@ import { storage, db, auth } from "../firebase";
 import { useHistory } from 'react-router-dom';
 import ReactImageBase64 from "react-image-base64"
 
+import { toBlobFunction } from "./Function/Functions"
+
 const Drink_TweetInput = ({ DB, STORAGE }) => {
     // 画像を保持するためのuseState、入力された文字を保持するためのuseState
     const [images, setImages] = useState({ data: [] });
@@ -18,19 +20,10 @@ const Drink_TweetInput = ({ DB, STORAGE }) => {
         });
     }
 
-
-    //***** */ ファイル選択して、画像を選ぶ。画像を保持する
-    // const onChangeImageHandler = (e) => {
-    //     if (e.target.files[0]) {
-    //         setInputImage(e.target.files[0]);
-    //         e.target.value = "";
-    //     }
-    // };
-
     const sendTweet = async (e) => {
         loginUser();
-        e.preventDefault();
-        if (images) {
+        // e.preventDefault();// formタグを使う時、送信のtype=submitを使うとページがリロードされるので、リロードの処理を無効にする
+        if (images.data.length > 0) { //★★★
             // 画像 + テキストを登録させる。firebaseの仕様で同じファイル名の画像を複数回アップしてしまうと元々あったファイルが削除される。
             // そのためにファイル名をランダムなファイル名を作る必要がある、以下記述のとおり。
             const image = images.data[0].fileData
@@ -42,29 +35,8 @@ const Drink_TweetInput = ({ DB, STORAGE }) => {
                 .join("");
             const fileName = randomMoji + "_" + image.name;
 
-            console.log(image)
-
-            // ******base64文字列（リサイズ後）をBlob形式のFileに変換する。******
-            const toBlob = (base64) => {
-                const bin = atob(base64.replace(/^.*,/, ''));
-                const buffer = new Uint8Array(bin.length);
-                for (let i = 0; i < bin.length; i++) {
-                    buffer[i] = bin.charCodeAt(i);
-                }
-                // Blobを作成
-                try {
-                    var blob = new Blob([buffer.buffer], {
-                        type: 'image/png'
-                    });
-                } catch (e) {
-                    return false;
-                }
-                return blob;
-            }
-            // ******************************************************************
-
             // Blob形式のFileに変換後に、firebase storageに登録する処理
-            let blobData = toBlob(image)
+            let blobData = toBlobFunction(image)
             const uploadTweetImg = storage.ref(`${STORAGE}/${fileName}`).put(blobData);
 
             // firebaseのDBに登録する処理
@@ -72,7 +44,6 @@ const Drink_TweetInput = ({ DB, STORAGE }) => {
                 firebase.storage.TaskEvent.STATE_CHANGED,
                 // 3つ設定できる。進捗度合い = プログレス。エラーに関する = アップロードがうまくいかないなどのエラーを管理する。
                 // 成功した時 async（非同期＝何かを実行した後に次のことをするためのもの）
-
                 () => { }, //進捗度合いの管理するもの、
                 (err) => {
                     //エラーに関する処理
@@ -93,7 +64,8 @@ const Drink_TweetInput = ({ DB, STORAGE }) => {
                             });
 
                             setDrinkMessage("");
-                            console.log(images);
+                            setImages({ data: [] }); 
+                            document.querySelector('#js-image-base64').value = '';
                         });
                 }
             );
@@ -105,16 +77,13 @@ const Drink_TweetInput = ({ DB, STORAGE }) => {
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });
             setDrinkMessage("");
+            setImages({ data: [] });
         }
     };
 
-    const clearImages = () => {
-        setImages({ data: [] })
-    }
-
     return (
         <div className="drink">
-            <form className="items">
+            <div className="items">
                 <div className="items2">
                     <input
                         type="text"
@@ -145,9 +114,9 @@ const Drink_TweetInput = ({ DB, STORAGE }) => {
                     />
                 </div>
 
-                <div>    
+                <div>
                     {images.data.map((image, index) => (
-                         <img src={image.fileData} alt={"sugoi"} width={70} className="tweet_image" />
+                        <img src={image.fileData} alt={"sugoi"} width={70} className="tweet_image" />
                     ))}
                 </div>
 
@@ -157,24 +126,7 @@ const Drink_TweetInput = ({ DB, STORAGE }) => {
                     </button>
                 </div>
 
-                {/* <div className="items2">
-                    <input type="file" name="file" onChange={onChangeImageHandler} />
-                </div> */}
-
-                <div>
-                    <button type="button" onClick={clearImages}>
-                        {/* <button type="button" disabled={!(images==={ data: [] })} onClick={clearImages}> */}
-                        {/* //disableできない・・・。 */}
-                        投稿画像削除
-                    </button>
-                </div>
-
-                {/* <div>
-                    <button type="submit" disabled={!drinkMessage}>
-                        「コメント」or「コメント＆画像」の投稿
-                    </button>
-                </div> */}
-            </form>
+            </div>
         </div>
     );
 };

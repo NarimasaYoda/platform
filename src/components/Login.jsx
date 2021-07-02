@@ -2,48 +2,40 @@ import React, { useState, useEffect } from "react";
 import firebase from "firebase/app";
 import { storage, db, auth } from "../firebase";
 import { Link } from "react-router-dom"
+import { useHistory } from 'react-router-dom';
 import ReactImageBase64 from "react-image-base64"
+import { toBlobFunction } from "./Function/Functions"
 
-const Login = (props) => {
+const Login = ({ JumpTo }) => {
+    const DB = "users"
+    const STORAGE = "images_users"
+
     //ログイン状態の保持、メールの状態を保持、パスワードの状態を保持
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [nickname, setNickname] = useState("");
     const [images, setImages] = useState({ data: [] });
-    const [currentUser, setCurrentUser] = useState("")
-    const [isAuthChg, setIsAuthChg] = useState(true)
 
-    const DB = "users"
-    const STORAGE = "images_users"
-
-    // useEffectを使って読み込み時に状態を判断する、phpでのセッションに相当するイメージ
-    // userというパラメータがあり、これには「ログインに成功した時に」この部分に全部格納される。
-    // userに何かしらの情報が入っていればログインに成功、入っていなければログイン失敗、ログインしていないということ。
-
-    useEffect(() => {
-        const unSub = auth.onAuthStateChanged((user) => {
-            // 判定の条件は、何らかの情報が入っていた時、ルートの画面Appに遷移させる。
-            // 逆にいうと、userにない場合はこの画面にとどまり続ける。push("/") ログインしている人が到達するページ
-            user && props.history.push("/");
-        });
-        return () => unSub();
-    }, [props.history]);
-
-
-    useEffect(() => {
+    const history = useHistory()
+    const loginUser = (e) => {
         auth.onAuthStateChanged(user => {
-            if (user == null) {
-                setCurrentUser("")
-            } else {
-                setCurrentUser(user);
-            }
+            // ログイン状態の場合、currentUserというステート（変数）にAPIから取得したuser情報を格納
+            // ログアウト状態の場合、ログインページ（loginEvent）へリダイレクト
+            user && history.push(JumpTo);
         });
-    }, [isAuthChg]) //★これも使い方が怪しい
+    }
 
-    const setUserInfo = async (e) => {
+    useEffect(() => {
+        loginUser();
+    }, [])
+
+    // console.log(history, "history")
+    // console.log(JumpTo, "JumpTo")
+    
+    const setUserInfo = async (uid) => {
         // e.preventDefault();
-        if (images) {
+        if (images.data.length > 0) {
             // 画像 + テキストを登録させる。firebaseの仕様で同じファイル名の画像を複数回アップしてしまうと元々あったファイルが削除される。
             // そのためにファイル名をランダムなファイル名を作る必要がある、以下記述のとおり。
             const image = images.data[0].fileData
@@ -54,30 +46,10 @@ const Login = (props) => {
                 .map((n) => S[n % S.length])
                 .join("");
             const fileName = randomMoji + "_" + image.name;
-
-            console.log(image)
-
-            // ******base64文字列（リサイズ後）をBlob形式のFileに変換する。******
-            const toBlob = (base64) => {
-                const bin = atob(base64.replace(/^.*,/, ''));
-                const buffer = new Uint8Array(bin.length);
-                for (let i = 0; i < bin.length; i++) {
-                    buffer[i] = bin.charCodeAt(i);
-                }
-                // Blobを作成
-                try {
-                    var blob = new Blob([buffer.buffer], {
-                        type: 'image/png'
-                    });
-                } catch (e) {
-                    return false;
-                }
-                return blob;
-            }
-            // ******************************************************************
+            // console.log(image)
 
             // Blob形式のFileに変換後に、firebase storageに登録する処理
-            let blobData = toBlob(image)
+            let blobData = toBlobFunction(image)
             const uploadTweetImg = storage.ref(`${STORAGE}/${fileName}`).put(blobData);
 
             // firebaseのDBに登録する処理
@@ -99,35 +71,33 @@ const Login = (props) => {
                         .then(async (url) => {
                             await
                                 db.collection(DB).add({
-                                    uid: currentUser,  //★このuidが取得できない。
+                                    uid: uid,
                                     image: url,
                                     image_name: fileName,
                                     nickname: nickname,
-                                    admin:0, //★admin 0 or 1
+                                    admin: 0, //★admin 0 or 1
                                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                 });
-                            setCurrentUser("");
                             setNickname("");
-                            console.log(images);
+                            setImages({ data: [] }); //★★★
+                            // document.querySelector('#js-image-base64').value = ''//★★★
+                            // console.log(images);
                         });
                 }
             );
         }
         else {
             db.collection(DB).add({
-                uid: currentUser,
+                uid: uid,
                 image: "",
                 image_name: "",
                 nickname: nickname,
-                admin:0, //★admin 0 or 1
+                admin: 0, //★admin 0 or 1
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });
-            setCurrentUser("");
             setNickname("");
+            setImages({ data: [] }); //★★★
         }
-
-
-        console.log("AAA")
     }
 
 
@@ -187,10 +157,9 @@ const Login = (props) => {
                     isLogin
                         ? async () => {
                             try {
-                                // ログイン時 firebaseに[signInWithEmailAndPassword]というものがある。
-                                // それにemail, passwordで保持した状態を送り、成功すればhistoryによって画面遷移が実行される
+                                // ログイン時 [signInWithEmailAndPassword]にemail, passwordで保持した状態を送り成功すればhistoryによって画面遷移が実行される
                                 await auth.signInWithEmailAndPassword(email, password);
-                                props.history.push("/");
+                                history.push(JumpTo);
                             } catch (error) {
                                 // ログインできない、失敗したときはエラーで表示される
                                 alert(error.message);
@@ -199,14 +168,11 @@ const Login = (props) => {
                         :
                         async () => {
                             try {
-                                // 登録時 firebaseに[createUserWithEmailAndPassword]というものがある。
-                                // それにemail, passwordで保持した状態を送り、成功すればhistoryによって画面遷移が実行される
-                                await auth.createUserWithEmailAndPassword(email, password);
-
-                                { setUserInfo() } //★特にここが怪しい。firebaseのAuthで、IDを作って、「uidができた」のちに、アイコン画像を格納したい。
-
-                                // props.history.push("/");
-
+                                // 登録時 [createUserWithEmailAndPassword]にemail, passwordで保持した状態を送り成功すればhistoryによって画面遷移が実行される
+                                const authData = await auth.createUserWithEmailAndPassword(email, password);
+                                { setUserInfo(authData.user.uid) } //awaitでは、取得して変数に取り込んで”から”次のfunctionに移動する。
+                                // .then ((authData.user.uid)=>()) ??? 同期非同期！これでもよい
+                                history.push(JumpTo);
                             } catch (error) {
                                 // ログインできない、失敗したときはエラーで表示される
                                 alert(error.message);
@@ -221,7 +187,7 @@ const Login = (props) => {
             <button onClick={() => setIsLogin(!isLogin)}>
                 切替：{isLogin ? "初期登録ページに移動" : "ログインページに移動"}
             </button>
-
+            <p><Link to="/">Homeへ</Link></p>
         </div>
     );
 };
