@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Img from "../images/test.png";
 import { storage, db } from "../firebase";
-// import GridList from "@material-ui/core/GridList";
 
 // Post（プロップスを受け取って表示する方）
 const Admin_Post = ({ key, id, date, event, image, image_name, text, tag_name,

@@ -72,6 +72,7 @@ const Login = ({ JumpTo }) => {
                             await
                                 db.collection(DB).add({
                                     uid: uid,
+                                    email:email,
                                     image: url,
                                     image_name: fileName,
                                     nickname: nickname,

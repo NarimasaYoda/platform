@@ -60,7 +60,7 @@ const Event_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
   // 送信を押されたら登録の処理を実行させる記述
   const handleAddNewComment = (e) => {
     loginUser();
-    e.preventDefault();// formタグを使う時、送信のtype=submitを使うとページがリロードされるので、リロードの処理を無効にする
+    // e.preventDefault();// formタグを使う時、送信のtype=submitを使うとページがリロードされるので、リロードの処理を無効にする
     // firebaseのdbにアクセスをしてデータを登録。doc()これがポイント！
     db.collection(DB).doc(id).collection("comment").add({
       text: comment, //useStateの[comment]です
@@ -109,7 +109,7 @@ const Event_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
               ))}
           </div>
 
-          {/* formタグを設置して投稿ようの入力欄を作る */}
+          {/* 投稿用ようの入力欄を作る */}
             <input
               type="text"
               placeholder="コメントを記述"

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import firebase from "firebase/app";
-import { storage, db } from "../firebase";
+import { storage, db, auth } from "../firebase";
 import { useHistory } from 'react-router-dom';
 import ReactImageBase64 from "react-image-base64"
+
+import { toBlobFunction } from "./Function/Functions"
 
 const Admin_InputImages = ({ DB, STORAGE }) => {
 
@@ -10,8 +12,8 @@ const Admin_InputImages = ({ DB, STORAGE }) => {
     const [comments, setComments] = useState("");
 
     const sendTweet = async (e) => {
-        e.preventDefault();
-        if (images) {
+        // e.preventDefault();
+        if (images.data.length > 0) {
             const image = images.data[0].fileData
             const S =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; //ランダムな文字列を作るための候補、62文字
@@ -21,29 +23,8 @@ const Admin_InputImages = ({ DB, STORAGE }) => {
                 .join("");
             const fileName = randomMoji + "_" + Image.name;
 
-            console.log(image);
-
-            // ******base64文字列（リサイズ後）をBlob形式のFileに変換する。******
-            const toBlob = (base64) => {
-                const bin = atob(base64.replace(/^.*,/, ''));
-                const buffer = new Uint8Array(bin.length);
-                for (let i = 0; i < bin.length; i++) {
-                    buffer[i] = bin.charCodeAt(i);
-                }
-                // Blobを作成
-                try {
-                    var blob = new Blob([buffer.buffer], {
-                        type: 'image/png'
-                    });
-                } catch (e) {
-                    return false;
-                }
-                return blob;
-            }
-            // ******************************************************************
-
             // Blob形式のFileに変換後に、firebase storageに登録する処理
-            let blobData = toBlob(image)
+            let blobData = toBlobFunction(image)
             const uploadTweetImg = storage.ref(`${STORAGE}/${fileName}`).put(blobData);
 
             uploadTweetImg.on(
@@ -66,7 +47,8 @@ const Admin_InputImages = ({ DB, STORAGE }) => {
                                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                             });
                             setComments("");
-                            console.log(images);
+                            setImages({ data: [] }); 
+                            document.querySelector('#js-image-base64').value = '';
                         });
                 }
             );
@@ -78,16 +60,13 @@ const Admin_InputImages = ({ DB, STORAGE }) => {
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });
             setComments("");
+            setImages({ data: [] }); 
         }
     };
 
-    const clearImages = () => {
-        setImages({ data: [] })
-    }
-
     return (
         <div className="event">
-            <form className="items">
+            <div className="items">
                 <div>
                     <input
                         type="text"
@@ -129,16 +108,7 @@ const Admin_InputImages = ({ DB, STORAGE }) => {
                         「コメント＆画像」の投稿
                     </button>
                 </div>
-
-                <div>
-                    <button type="button" onClick={clearImages}>
-                        {/* <button type="button" disabled={!(images==={ data: [] })} onClick={clearImages}> */}
-                        {/* //disableできない・・・。 */}
-                        投稿画像削除
-                    </button>
-                </div>
-
-            </form>
+            </div>
         </div>
     );
 };

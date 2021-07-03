@@ -6,6 +6,9 @@ import Drink_Slide from './Drink_Slide'
 import Drink_TweetInput from './Drink_TweetInput'
 import Drink_Feed from './Drink_Feed'
 
+import Icon_Feed from './Icon_Feed'
+import Icon_Feed_2 from './Icon_Feed_2'
+
 const Drink = () => {
     const [currentUser, setCurrentUser] = useState("")
 
@@ -33,8 +36,8 @@ const Drink = () => {
             <hr />
             <p className="comment3">投稿時にはユーザ登録が必要です</p>
 
-            <button onClick={()=>moveToLogin()}>ユーザログイン</button>
-            
+            <button onClick={() => moveToLogin()}>ユーザログイン</button>
+
             <button
                 onClick={async () => {
                     try {
@@ -48,6 +51,21 @@ const Drink = () => {
                 ユーザログアウト
             </button>
             <Link to="/">Homeへ</Link>
+
+            <Icon_Feed
+                DB="users"
+                STORAGE="images_users"
+            // uid={currentUser.uid}
+            />
+
+            {/* ★ここができない。 */}
+            <Icon_Feed_2
+                DB="users"
+                STORAGE="images_users"
+            // uid={currentUser.uid}
+            /> 
+            {/* ★ここができない。 */}
+
             <hr />
 
             <Drink_Slide

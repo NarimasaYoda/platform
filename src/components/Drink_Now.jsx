@@ -6,17 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 
 import Img from "../images/test.png";
-
-// ************************************
-const getModalStyle = () => {
-    const top = 50;
-    const left = 50;
-    return {
-        top: `${top}%`,
-        left: `${left}%`,
-        transform: `translate(-${top}%, -${left}%)`,
-    };
-}
+import { toBlobFunction, getModalStyle } from "./Function/Functions"
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -28,10 +18,12 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2, 4, 3),
     },
 }));
-// ************************************
 
-// Post（プロップスを受け取って表示する方）
+
 const Drink_Now = ({ key, id, DB, STORAGE, STORAGE2 }) => {
+    const classes = useStyles();
+    const [modalStyle] = useState(getModalStyle(50, 50));
+    const [open, setOpen] = useState(false);
 
     const [imairuInfo, setImairuInfo] = useState([{
         id: "",
@@ -43,16 +35,12 @@ const Drink_Now = ({ key, id, DB, STORAGE, STORAGE2 }) => {
         timestamp: null,
     },]);
 
-    const classes = useStyles();
-    const [modalStyle] = useState(getModalStyle);
-    const [open, setOpen] = useState(false);
 
     useEffect(() => {
-        if (!id) return false;  //追記 全部にコメントが投稿されているかどうかでハンドリングしないといけない。
+        if (!id) return false;
 
         const firebaseData = db
             .collection(DB)
-            // ポイントです！
             .doc(id)
             .collection("imairu")
             .orderBy("timestamp", "asc")
@@ -85,21 +73,55 @@ const Drink_Now = ({ key, id, DB, STORAGE, STORAGE2 }) => {
     }
 
     const windowOpenFunc = () => {
-        console.log("img","this.name")
-        loginUser();
+        console.log("img", "this.name")//この時にクリックした画像のNameを抽出したい。
+        // loginUser();
         setOpen(true);
     }
 
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    // const uid_test = document.getElementById("test_image").name
+    // console.log(uid_test,"※uid_test")
+    
+    const body = (
+        <div style={modalStyle} className={classes.paper}>
+            {/* {uid} */}
+            <div className="items2">
+                <p>
+                    uid（画像のname属性として設定しているが、それを持ってきたい。）this.image.name??  
+                    uid:"zGQvjvAumwOjtB1nDSs8nfLkQqp1"を連携して、uidに関連するuser情報を載せたい<br/>
+                    nickname<br/>
+                    icon画像<br/>
+
+                </p>
+
+            </div>
+
+
+            <button type="button" onClick={handleClose}>× Close</button>
+        </div>
+    );
+
     return (
         <div className="imairu">
-            {imairuInfo && imairuInfo.map((info,index) => (
+            {imairuInfo && imairuInfo.map((info, index) => (
                 <div className="items">
                     {/* 画像があるとき */}
-                    {info.image && <img src={info.image} alt="" className="post_image" name={info.id} onClick={() => windowOpenFunc()} />}
+                    {info.image && <img src={info.image} alt="" className="post_image" idName="test_image" name={info.uid} onClick={() => windowOpenFunc()} />}
                     {/* 画像ない時 */}
-                    {!info.image && <img src={Img} alt="" className="post_image" name={info.id} onClick={() => windowOpenFunc()} />}
+                    {!info.image && <img src={Img} alt="" className="post_image" idName="test_image" name={info.uid} onClick={() => windowOpenFunc()} />}
                 </div>
             ))}
+
+            <Modal
+                open={open}
+                onClose={handleClose}
+            >
+                {body}
+            </Modal>
+
         </div>
     );
 };

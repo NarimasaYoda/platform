@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from "react-router-dom"
-import { db, auth } from "../firebase";
+import { auth } from "../firebase";
+import { Link, useHistory } from "react-router-dom"
 
-import Admin_Feed from './Admin_Feed'
 import Admin_InputImages from './Admin_InputImages'
+import Admin_Feed from './Admin_Feed'
 
-const Admin = (props) => {
+const Admin = () => {
+
+    const history = useHistory()
     useEffect(() => {
         // onAuthStateChanged→何らかのユーザー認証変化があったら実行される
         // その際に[user]内に格納される＝空だったら何も起こらない→つまりログインされていない状態
@@ -13,7 +15,7 @@ const Admin = (props) => {
             // あるときは user = true ,
             // ないときは !user = false
             // !user = falseとなる、つまりユーザーがログインしていない状態の時はログインページに飛ばす
-            !user && props.history.push("/login");
+            !user && history.push("/login");
         });
         return () => unSub();
     }, []);
@@ -25,7 +27,7 @@ const Admin = (props) => {
                 onClick={async () => {
                     try {
                         await auth.signOut();
-                        props.history.push("/"); //ここでログアウトして飛ばしたいページに戻す
+                        history.push("/"); //ここでログアウトして飛ばしたいページに戻す
                     } catch (error) {
                         alert(error.message);
                     }
