@@ -25,17 +25,17 @@ const Conversations_Feed = ({ uid, DB }) => {
 
     console.log(uid, DB)
 
-    // const [chatRooms2, setChatRooms2] = useState([{
-    //     id: "",
-    //     room_name: "",
-    //     uid1: "",
-    //     user1: "",
-    //     user1_image: "",
-    //     uid2: "",
-    //     user2: "",
-    //     user2_image: "",
-    //     timestamp: null,
-    // }]);
+    const [chatRooms2, setChatRooms2] = useState([{
+        id: "",
+        room_name: "",
+        uid1: "",
+        user1: "",
+        user1_image: "",
+        uid2: "",
+        user2: "",
+        user2_image: "",
+        timestamp: null,
+    }]);
 
     const getChatRoomsData1 = (uidInfo) => {
         const firebase = db
@@ -59,31 +59,31 @@ const Conversations_Feed = ({ uid, DB }) => {
             )
     }
 
-    // const getChatRoomsData2 = (uidInfo) => {
-    //     const firebase = db
-    //         .collection("chats")
-    //         .where('uid2', '==', uidInfo) //★まとめられないか
-    //         // .orderBy('timestamp', 'asc')
-    //         .onSnapshot((snapshot) =>
-    //             setChatRooms2(
-    //                 snapshot.docs.map((doc) => ({
-    //                     id: doc.id,
-    //                     room_name: doc.data().room_name,
-    //                     uid1: doc.data().uid1,
-    //                     user1: doc.data().user1,
-    //                     user1_image: doc.data().user1_image,
-    //                     uid2: doc.data().uid2,
-    //                     user2: doc.data().user2,
-    //                     user2_image: doc.data().user2_image,
-    //                     timestamp: doc.data().timestamp
-    //                 }))
-    //             )
-    //         )
-    // }
+    const getChatRoomsData2 = (uidInfo) => {
+        const firebase = db
+            .collection("chats")
+            .where('uid2', '==', uidInfo) //★まとめられないか
+            // .orderBy('timestamp', 'asc')
+            .onSnapshot((snapshot) =>
+                setChatRooms2(
+                    snapshot.docs.map((doc) => ({
+                        id: doc.id,
+                        room_name: doc.data().room_name,
+                        uid1: doc.data().uid1,
+                        user1: doc.data().user1,
+                        user1_image: doc.data().user1_image,
+                        uid2: doc.data().uid2,
+                        user2: doc.data().user2,
+                        user2_image: doc.data().user2_image,
+                        timestamp: doc.data().timestamp
+                    }))
+                )
+            )
+    }
 
     useEffect(() => {
         getChatRoomsData1(uid);
-        // getChatRoomsData2(uid);
+        getChatRoomsData2(uid);
     }, [])
 
     console.log(chatRooms1, chatRooms1[0], chatRooms1[0].user1)
@@ -111,7 +111,7 @@ const Conversations_Feed = ({ uid, DB }) => {
             ))}
 
 
-            {/* {chatRooms2.map((chatItem) => (
+            {chatRooms2.map((chatItem) => (
                 <Conversations_Post
                     key={chatItem.id}
 
@@ -127,7 +127,7 @@ const Conversations_Feed = ({ uid, DB }) => {
 
                     DB={DB}
                 />
-            ))} */}
+            ))}
 
         </div >
     )
