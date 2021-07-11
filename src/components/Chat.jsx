@@ -28,7 +28,7 @@ const Chat = () => {
             <h1 className="title">メッセージを送ろう</h1>
             <hr />
             <p className="comment3">投稿時にはユーザ登録が必要です</p>
-            <button onClick={() => history.push("/loginDrink")}>ユーザログイン</button>
+            <button onClick={() => history.push("/login")}>ユーザログイン</button>
             <Logout JumpTo="/" />
             {currentUser && //★ポイント uid取得後に可能となる
                 (<Icon_Feed
