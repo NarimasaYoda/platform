@@ -45,7 +45,7 @@ const Conversations = ({ user1, uid1, user2, uid2, index }) => {
             }
             <hr />
             <Link to="/">Homeへ</Link><span>/</span>
-            <Link to="/chats">Chatへ</Link>
+            <Link to="/chat">Chatへ</Link>
             <hr />
             <img src={Img_Chat} alt="" className="Chat_image" />
             <hr />
