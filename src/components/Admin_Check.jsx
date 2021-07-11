@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { storage, db, auth } from "../firebase";
+import { Link, useHistory } from "react-router-dom"
 
-import Img from "../images/no_image.png";
-
-const Icon_Feed = ({ id, DB, STORAGE, STORAGE2, uid }) => {
+const Admin_Check = ({ id, DB, STORAGE, STORAGE2, uid }) => {
     const [posts, setPosts] = useState([{
         id: "",
         admin: "",
@@ -14,6 +13,8 @@ const Icon_Feed = ({ id, DB, STORAGE, STORAGE2, uid }) => {
         uid: "",
         timestamp: null,
     }]);
+
+    const history = useHistory()
 
     const getPostsData = (uidInfo) => {
         const firebase = db
@@ -41,19 +42,13 @@ const Icon_Feed = ({ id, DB, STORAGE, STORAGE2, uid }) => {
         getPostsData(uid);
     }, [])
 
+    if (posts[0].admin === 0) {
+        history.push("/login");
+    }
+
     return (
-        <div>
-            <div className="imairu">
-                {posts.map((postId, index) => (
-                    <div className="items">
-                        {postId.image && <img src={postId.image} alt="" className="post_image" />}
-                        {!postId.image && <img src={Img} alt="" className="post_image" />}
-                        <span className = "comment2">{postId.nickname}/{postId.uid}</span>
-                    </div>
-                ))}
-            </div>
-        </div>
+        <></>
     )
 }
 
-export default Icon_Feed
+export default Admin_Check

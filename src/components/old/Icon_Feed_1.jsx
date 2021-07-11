@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { storage, db, auth } from "../firebase";
+import { storage, db, auth } from "../../firebase";
 
-import Img from "../images/test.png";
+// import Img from "../images/no_image.png";
 
-const Icon_Feed_2 = ({ id, DB, STORAGE, STORAGE2, uid }) => {
-
-    const [currentUser, setCurrentUser] = useState("")
+const Icon_Feed = ({ id, DB, STORAGE, STORAGE2, uid }) => {
 
     const [posts, setPosts] = useState([{
         id: "",
@@ -18,28 +16,38 @@ const Icon_Feed_2 = ({ id, DB, STORAGE, STORAGE2, uid }) => {
         timestamp: null,
     }]);
 
-    // const uid2 = "zGQvjvAumwOjtB1nDSs8nfLkQqp1"
+    
+    // firebase.auth().currentUser.uid
+    // const uid2 = auth.currentUser.uid
+    
+    const uid2 = "zGQvjvAumwOjtB1nDSs8nfLkQqp1"
 
-    const getUserData = async () => {
-        await auth.onAuthStateChanged(user => {
-            if (user === null) {
-                setCurrentUser("")
-            } else {
-                setCurrentUser(user);
-            }
-        });
+    // const getUser = () => {
+    //     return new Promise(resolve => {
+    //         auth.onAuthStateChanged(user => {
+    //             if (user === null) {
+    //                 return ""
+    //             } else {
+    //                 return user;
+    //             }
+    //         });
+    //     })
+    // }
 
-        const uid = currentUser.uid;
-        getPostsData(uid);
-    }
+    // const user = ""
+    // const func = async () => {
+    //     user = await getUser();
+    // }
 
-    const getPostsData = (uid_aaa) => {
-        // const uid2 = "zGQvjvAumwOjtB1nDSs8nfLkQqp1"
+    // func();
+    // // const user = getUser();
+    // console.log(user.uid, "※user.uid")
 
+    const getPostsData = (uid_data) => {
         // return new Promise(resolve => {
         const firebase = db
             .collection(DB)
-            .where('uid', '==', uid_aaa)
+            .where('uid', '==', uid_data)
             // .orderBy('timestamp', 'desc')
             .onSnapshot((snapshot) =>
                 setPosts(
@@ -60,16 +68,8 @@ const Icon_Feed_2 = ({ id, DB, STORAGE, STORAGE2, uid }) => {
     }
 
     useEffect(() => {
-        getUserData();
-    }, [])
-
-    console.log(currentUser.uid, "※currentUser.uid");
-
-
-    // const uid2 = "zGQvjvAumwOjtB1nDSs8nfLkQqp1"
-    // useEffect(() => {
-        // getPostsData(uid2);
-    // }, []);
+        getPostsData(uid2);
+    }, []); //最初に一度Firebaseにアクセスすることを意味する
 
     console.log(posts, "posts")
 
@@ -91,4 +91,4 @@ const Icon_Feed_2 = ({ id, DB, STORAGE, STORAGE2, uid }) => {
     )
 }
 
-export default Icon_Feed_2
+export default Icon_Feed

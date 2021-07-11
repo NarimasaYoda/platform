@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../firebase";
+import { auth, db } from "../firebase";
 import SwipeableViews from "react-swipeable-views";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -12,8 +12,8 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 
-import Drink_Modal from './Drink_Modal'
-import Drink_Now from './Drink_Now'
+import Drink_NowTweet from './Drink_NowTweet'
+import Drink_NowFeed from './Drink_NowFeed'
 
 const useStyles = makeStyles(() => {
     const baseStyle = {
@@ -83,7 +83,6 @@ const useStyles = makeStyles(() => {
 });
 
 const Drink_Slide = ({ DB, STORAGE, STORAGE2, uid }) => {
-
     const [posts, setPosts] = useState([{
         id: "",
         date: "",
@@ -99,7 +98,6 @@ const Drink_Slide = ({ DB, STORAGE, STORAGE2, uid }) => {
 
         timestamp: null,
     }]);
-
 
     //useEffectを使って、firebaseのデータを取得してuseStateで保持する。Firebaseに変更があったら感知する(Firebaseの機能)。
     useEffect(() => {
@@ -127,14 +125,20 @@ const Drink_Slide = ({ DB, STORAGE, STORAGE2, uid }) => {
             )
     }, []); //最初に一度Firebaseにアクセスすることを意味する
 
-
-
     const [swipeableActions, setSwipeableActions] = useState();
     const [tabIndex, setTabIndex] = useState(0);
 
     const classes = useStyles();
 
     const handleChange = index => { setTabIndex(index) };
+
+    useEffect(() => {
+        const ms = 500;
+        setTimeout(() => setTabIndex(2), ms * 2);
+        setTimeout(() => setTabIndex(3), ms * 3);
+        setTimeout(() => setTabIndex(4), ms * 4);
+        setTimeout(() => setTabIndex(0), ms * 5);
+    }, [])
 
     return (
         <>
@@ -178,7 +182,6 @@ const Drink_Slide = ({ DB, STORAGE, STORAGE2, uid }) => {
                                 className={classes.image}
                                 src={postItem.image}
                             />
-                            <hr />
                             <CardContent className={classes.cardContent}>
                                 <Typography
                                     variant="body2"
@@ -187,26 +190,38 @@ const Drink_Slide = ({ DB, STORAGE, STORAGE2, uid }) => {
                                 >
                                     {postItem.text}
                                 </Typography>
+                                <hr />
+                                {uid &&
+                                    (<Drink_NowTweet
+                                        id={postItem.id}
+                                        DB={DB}
+                                        STORAGE={STORAGE}
+                                        STORAGE2={STORAGE2}
+                                        uid={uid}
+                                    />)
+                                }
+                                {!uid &&
+                                    (<Drink_NowTweet
+                                        id={postItem.id}
+                                        DB={DB}
+                                        STORAGE={STORAGE}
+                                        STORAGE2={STORAGE2}
+                                    />)
+                                }
 
-                                <Drink_Modal
+                                <Drink_NowFeed
                                     id={postItem.id}
                                     DB={DB}
                                     STORAGE={STORAGE}
                                     STORAGE2={STORAGE2}
-                                    uid={uid} />
-
-                                <Drink_Now
-                                    id={postItem.id}
-                                    DB={DB}
-                                    STORAGE={STORAGE}
-                                    STORAGE2={STORAGE2}
-                                    uid={uid}/>
+                                />
 
                             </CardContent>
                         </Card>
                     </div>
                 ))}
             </SwipeableViews>
+
         </>
     );
 };

@@ -5,8 +5,9 @@ import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 
-import Img from "../images/test.png";
+import Img from "../images/no_image.png";
 import { toBlobFunction, getModalStyle } from "./Function/Functions"
+import Icon_Feed from "./Icon_Feed"
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -19,11 +20,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
-const Drink_Now = ({ key, id, DB, STORAGE, STORAGE2 }) => {
+const Drink_NowFeed = ({ key, id, DB, STORAGE, STORAGE2, uid }) => {
     const classes = useStyles();
     const [modalStyle] = useState(getModalStyle(50, 50));
     const [open, setOpen] = useState(false);
+
+    const [targetIndex, setTargetIndex] = useState(null);//★
+    // console.log(key, uid, 100)
 
     const [imairuInfo, setImairuInfo] = useState([{
         id: "",
@@ -34,7 +37,6 @@ const Drink_Now = ({ key, id, DB, STORAGE, STORAGE2 }) => {
         text: "",
         timestamp: null,
     },]);
-
 
     useEffect(() => {
         if (!id) return false;
@@ -72,58 +74,60 @@ const Drink_Now = ({ key, id, DB, STORAGE, STORAGE2 }) => {
         });
     }
 
-    const windowOpenFunc = () => {
-        console.log("img", "this.name")//この時にクリックした画像のNameを抽出したい。
+    const windowOpenFunc = (index) => {
+        console.log(imairuInfo[index]["uid"], index)//★//この時にクリックした画像のNameを抽出したい。
         // loginUser();
         setOpen(true);
+        setTargetIndex(index);//★
     }
 
     const handleClose = () => {
         setOpen(false);
+        setTargetIndex(null);
     };
 
-    // const uid_test = document.getElementById("test_image").name
-    // console.log(uid_test,"※uid_test")
-    
+    // {imairuInfo[targetIndex]["image"] && <img src={imairuInfo[targetIndex]["image"]} alt="" className="post_image"/>}
+
     const body = (
         <div style={modalStyle} className={classes.paper}>
-            {/* {uid} */}
             <div className="items2">
-                <p>
-                    uid（画像のname属性として設定しているが、それを持ってきたい。）this.image.name??  
-                    uid:"zGQvjvAumwOjtB1nDSs8nfLkQqp1"を連携して、uidに関連するuser情報を載せたい<br/>
-                    nickname<br/>
-                    icon画像<br/>
+                {imairuInfo[targetIndex] && (
+                    <>
+                        <Icon_Feed
+                            DB="users"
+                            STORAGE="images_users"
+                            uid={imairuInfo[targetIndex]["uid"]}
+                        />
+                        <p>後ろ姿</p>
+                        {/* 画像があるとき */}
+                        {imairuInfo[targetIndex]["image"] && <img src={imairuInfo[targetIndex]["image"]} alt="" className="post_image" />}
+                        {/* 画像ない時 */}
+                        {!imairuInfo[targetIndex]["image"] && <img src={Img} alt="" className="post_image" />}
+                    </>
 
-                </p>
-
+                )}
             </div>
-
-
             <button type="button" onClick={handleClose}>× Close</button>
         </div>
     );
-
     return (
         <div className="imairu">
             {imairuInfo && imairuInfo.map((info, index) => (
                 <div className="items">
                     {/* 画像があるとき */}
-                    {info.image && <img src={info.image} alt="" className="post_image" idName="test_image" name={info.uid} onClick={() => windowOpenFunc()} />}
+                    {info.image && <img src={info.image} alt="" className="post_image" onClick={() => windowOpenFunc(index)} />}
                     {/* 画像ない時 */}
-                    {!info.image && <img src={Img} alt="" className="post_image" idName="test_image" name={info.uid} onClick={() => windowOpenFunc()} />}
+                    {!info.image && <img src={Img} alt="" className="post_image" onClick={() => windowOpenFunc(index)} />}
                 </div>
             ))}
-
             <Modal
                 open={open}
+                index={targetIndex}  //★
                 onClose={handleClose}
             >
                 {body}
             </Modal>
-
         </div>
     );
 };
-
-export default Drink_Now;
+export default Drink_NowFeed;

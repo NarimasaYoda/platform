@@ -7,7 +7,7 @@ import Drink_TweetInput from './Drink_TweetInput'
 import Drink_Feed from './Drink_Feed'
 
 import Icon_Feed from './Icon_Feed'
-import Icon_Feed_2 from './Icon_Feed_2'
+import Logout from "./Logout"
 
 const Drink = () => {
     const [currentUser, setCurrentUser] = useState("")
@@ -22,13 +22,7 @@ const Drink = () => {
         });
     }, [])
 
-    console.log(currentUser, "currentUser")
-
     const history = useHistory()
-
-    const moveToLogin = () => {
-        history.push("/loginDrink")
-    }
 
     return (
         <>
@@ -36,35 +30,18 @@ const Drink = () => {
             <hr />
             <p className="comment3">投稿時にはユーザ登録が必要です</p>
 
-            <button onClick={() => moveToLogin()}>ユーザログイン</button>
+            <button onClick={() => history.push("/loginDrink")}>ユーザログイン</button>
+            <Logout JumpTo = "/"/>
 
-            <button
-                onClick={async () => {
-                    try {
-                        await auth.signOut();
-                        history.push("/"); //ここでログアウトして飛ばしたいページに戻す
-                    } catch (error) {
-                        alert(error.message);
-                    }
-                }}
-            >
-                ユーザログアウト
-            </button>
             <Link to="/">Homeへ</Link>
 
-            <Icon_Feed
-                DB="users"
-                STORAGE="images_users"
-            // uid={currentUser.uid}
-            />
-
-            {/* ★ここができない。 */}
-            <Icon_Feed_2
-                DB="users"
-                STORAGE="images_users"
-            // uid={currentUser.uid}
-            /> 
-            {/* ★ここができない。 */}
+            {currentUser && //★ポイント uid取得後に可能となる
+                (<Icon_Feed
+                    DB="users"
+                    STORAGE="images_users"
+                    uid={currentUser.uid}
+                />)
+            }
 
             <hr />
 
@@ -79,6 +56,7 @@ const Drink = () => {
                 DB="drinks"
                 STORAGE="images"
                 uid={currentUser.uid} />
+                
             <Drink_Feed
                 DB="drinks"
                 STORAGE="images"

@@ -7,7 +7,9 @@ import ReactImageBase64 from "react-image-base64"
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 
+import Icon_Feed from "./Icon_Feed"
 import { toBlobFunction, getModalStyle } from "./Function/Functions"
+
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -20,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Drink_Modal = ({ id, DB, STORAGE, STORAGE2, uid }) => {
+const Drink_NowTweet = ({ id, DB, STORAGE, STORAGE2, uid }) => {
     const classes = useStyles();
     // getModalStyle is not a pure function, we roll the style only on the first render
     const [modalStyle] = useState(getModalStyle(50, 50));
@@ -119,7 +121,14 @@ const Drink_Modal = ({ id, DB, STORAGE, STORAGE2, uid }) => {
 
     const body = (
         <div style={modalStyle} className={classes.paper}>
-            {uid}
+            {uid &&
+                (<Icon_Feed
+                    DB="users"
+                    STORAGE="images_users"
+                    uid={uid}
+                />)
+            }
+            
             <div className="items2">
                 <input
                     type="text"
@@ -190,4 +199,4 @@ const Drink_Modal = ({ id, DB, STORAGE, STORAGE2, uid }) => {
     );
 }
 
-export default Drink_Modal
+export default Drink_NowTweet

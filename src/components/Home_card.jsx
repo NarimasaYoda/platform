@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { db } from "../firebase";
 import TinderCard from 'react-tinder-card'
 
-const Home_card = () => {
+const Home_card = ({DB}) => {
 
     const [posts, setPosts] = useState([{
         image: "",
@@ -12,7 +12,7 @@ const Home_card = () => {
 
     useEffect(() => {
         const firebaseData = db
-            .collection('homes')
+            .collection(DB)
             // .orderBy('timestamp', 'desc')
             .onSnapshot((snapshot) =>
                 setPosts(

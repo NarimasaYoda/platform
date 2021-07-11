@@ -3,7 +3,7 @@ import firebase from "firebase/app";
 import { storage, db, auth } from "../firebase";
 import { useHistory } from 'react-router-dom';
 
-import Img from "../images/test.png";
+import Img from "../images/no_image.png";
 
 // Post（プロップスを受け取って表示する方）
 const Event_Post = ({ key, id, date, event, image, image_name, text, timestamp, DB, STORAGE }) => {

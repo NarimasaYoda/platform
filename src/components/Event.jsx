@@ -4,6 +4,8 @@ import { Link, useHistory } from "react-router-dom"
 
 import Event_TweetInput from "./Event_TweetInput"
 import Event_Feed from "./Event_Feed"
+import Icon_Feed from './Icon_Feed'
+import Logout from "./Logout"
 
 const Event = () => {
     const [currentUser, setCurrentUser] = useState("")
@@ -18,13 +20,7 @@ const Event = () => {
         });
     }, [])
 
-    console.log(currentUser, "currentUser")
-
     const history = useHistory()
-
-    const moveToLogin = () => {
-        history.push("/loginEvent")
-    }
 
     return (
         <>
@@ -32,23 +28,19 @@ const Event = () => {
             <hr />
             <p className="comment3">投稿時にはユーザ登録が必要です</p>
 
-            <button onClick={()=>moveToLogin()}>ユーザログイン</button>
-            <button
-                onClick={async () => {
-                    try {
-                        await auth.signOut();
-                        history.push("/"); //ここでログアウトして飛ばしたいページに戻す
-                    } catch (error) {
-                        alert(error.message);
-                    }
-                }}
-            >
-                ユーザログアウト
-            </button>
-            <Link to="/">Homeへ</Link>
-           
-            {/* <p><Link to="/eventTweet">新規イベント投稿</Link></p> */}
+            <button onClick={()=>history.push("/loginEvent")}>ユーザログイン</button>
+            <Logout JumpTo = "/"/>
 
+            <Link to="/">Homeへ</Link>
+
+            {currentUser && //★ポイント uid取得後に可能となる
+                (<Icon_Feed
+                    DB="users"
+                    STORAGE="images_users"
+                    uid={currentUser.uid}
+                />)
+            }
+           
             <hr />
             <div className="event">
                 <Event_TweetInput

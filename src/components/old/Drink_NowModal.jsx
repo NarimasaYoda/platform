@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { storage, db, auth } from "../../firebase";
 // import { useHistory } from 'react-router-dom';
 
-import Img from "../images/test.png";
+import Img from "../images/no_image.png";
 
 // Post（プロップスを受け取って表示する方）
 const Drink_Now = ({ key, id, DB, STORAGE }) => {

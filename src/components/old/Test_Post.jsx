@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Img from "../images/test.png";
+import Img from "../images/no_image.png";
 import { storage, db } from "../firebase";
 import firebase from "firebase/app";
 
