@@ -27,15 +27,25 @@ export const getModalStyle = (top, left) => {
     };
 }
 
-export const createChatRoom = (DB, user1, uid1, user1_image, user2, uid2, user2_image) => {
+export const createChatRoom = (DB, uid1, uid2, user1, user2, user1_image, user2_image) => {
     db.collection(DB).add({
         room_name: uid1 + uid2,
-        user1: user1,
         uid1: uid1,
-        user1_image: user1_image,
-        user2: user2,
         uid2: uid2,
+        user2: user2,
+        user1: user1,
         user2_image: user2_image,
+        user1_image: user1_image,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     })
 }
+
+export const shuffle = ([...array]) => {
+    for (let i = array.length - 1; i >= 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+

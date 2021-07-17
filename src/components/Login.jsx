@@ -30,9 +30,6 @@ const Login = ({ JumpTo }) => {
         loginUser();
     }, [])
 
-    // console.log(history, "history")
-    // console.log(JumpTo, "JumpTo")
-    
     const setUserInfo = async (uid) => {
         // e.preventDefault();
         if (images.data.length > 0) {
@@ -72,7 +69,7 @@ const Login = ({ JumpTo }) => {
                             await
                                 db.collection(DB).add({
                                     uid: uid,
-                                    email:email,
+                                    email: email,
                                     image: url,
                                     image_name: fileName,
                                     nickname: nickname,
@@ -81,8 +78,6 @@ const Login = ({ JumpTo }) => {
                                 });
                             setNickname("");
                             setImages({ data: [] }); //★★★
-                            // document.querySelector('#js-image-base64').value = ''//★★★
-                            // console.log(images);
                         });
                 }
             );
@@ -101,58 +96,73 @@ const Login = ({ JumpTo }) => {
         }
     }
 
-
     return (
-        <div>
-            <h1>{isLogin ? "Login" : "Register"}</h1>
+        <div className="center">
+            <h2 className="title" >ログイン（初回登録）</h2>
+            <p className="comment1" >{isLogin ? "<Login>" : "<Register>"}
+                <button onClick={() => setIsLogin(!isLogin)}>
+                    切替：{isLogin ? "初期登録ページに移動" : "ログインページに移動"}
+                </button></p>
             <hr />
-            Email:<input
-                type="text"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <hr />
-            Password:<input
-                type="password"
-                name="password" //html5に用意されいてる
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <hr />
-            ニックネーム(初期登録時のみ):<input
-                type="text"
-                name="name"
-                value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
-            />
-            <hr />
-            アイコン画像(初期登録時のみ):<ReactImageBase64
-                maxFileSize={10485760}
-                thumbnail_size={50}
-                // drop={true}
-                // dropText="ファイルをドラッグ＆ドロップもしくは"
-                // capture="environment"
-                // multiple={true}
-                handleChange={data => {
-                    if (data.result) {
-                        console.log(images, "imagesのこと")
-                        let list = images.data
-                        list.push(data);
-                        console.log(list, "listのこと")
-                        setImages({ data: list })
-                    } else {
-                        // setErrors([...errors, data.messages]);
-                    }
-                }}
-            />
-            <div>
-                {images.data.map((image, index) => (
-                    <img src={image.fileData} alt={"sugoi"} width={70} className="tweet_image" />
-                ))}
-            </div>
-            <hr />
+            <p className="comment1">
+                Email(必須項目):<input
+                    type="text"
+                    name="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+            </p>
+            <p className="comment1">
+                Password(必須項目):<input
+                    type="password"
+                    name="password" //html5に用意されいてる
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+            </p>
+            <p className="comment3">投稿時にはユーザ登録が必要です</p>
 
+            <div className="register_Area" style={{ display: isLogin ? 'none' : '' }}>
+                <hr />
+                <p className="comment1">
+                    ニックネーム(必須項目):<input
+                        type="text"
+                        name="name"
+                        value={nickname}
+                        onChange={(e) => setNickname(e.target.value)}
+                    />
+                </p>
+                <p className="comment1">
+                    アイコン画像(任意):<ReactImageBase64
+                        maxFileSize={10485760}
+                        thumbnail_size={50}
+                        // drop={true}
+                        // dropText="ファイルをドラッグ＆ドロップもしくは"
+                        // capture="environment"
+                        // multiple={true}
+                        handleChange={data => {
+                            if (data.result) {
+                                console.log(images, "imagesのこと")
+                                let list = images.data
+                                list.push(data);
+                                console.log(list, "listのこと")
+                                setImages({ data: list })
+                            } else {
+                                // setErrors([...errors, data.messages]);
+                            }
+                        }}
+                    />
+                    <div>
+                        {images.data.map((image, index) => (
+                            <img src={image.fileData} alt={"sugoi"} width={70} className="tweet_image" />
+                        ))}
+                    </div>
+                </p>
+                <p className="comment3">初回登録時にニックネームと画像を登録できます  アイコン画像つけて投稿しよう</p>
+
+            </div>
+
+            <hr />
             <button
                 onClick={
                     isLogin
@@ -172,7 +182,6 @@ const Login = ({ JumpTo }) => {
                                 // 登録時 [createUserWithEmailAndPassword]にemail, passwordで保持した状態を送り成功すればhistoryによって画面遷移が実行される
                                 const authData = await auth.createUserWithEmailAndPassword(email, password);
                                 { setUserInfo(authData.user.uid) } //awaitでは、取得して変数に取り込んで”から”次のfunctionに移動する。
-                                // .then ((authData.user.uid)=>()) ??? 同期非同期！これでもよい
                                 history.push(JumpTo);
                             } catch (error) {
                                 // ログインできない、失敗したときはエラーで表示される
@@ -183,12 +192,8 @@ const Login = ({ JumpTo }) => {
             >
                 {isLogin ? "ログインする" : "登録する"}
             </button>
-            <hr />
 
-            <button onClick={() => setIsLogin(!isLogin)}>
-                切替：{isLogin ? "初期登録ページに移動" : "ログインページに移動"}
-            </button>
-            <p><Link to="/">Homeへ</Link></p>
+            <p className="comment1"><Link to="/">Home画面へ</Link></p>
         </div>
     );
 };

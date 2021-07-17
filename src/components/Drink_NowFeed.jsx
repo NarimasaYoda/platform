@@ -12,7 +12,7 @@ import Icon_Feed from "./Icon_Feed"
 const useStyles = makeStyles((theme) => ({
     paper: {
         position: 'absolute',
-        width: 600,
+        width: 300,
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
@@ -30,17 +30,18 @@ const Drink_NowFeed = ({ key, id, DB, STORAGE, STORAGE2, uid }) => {
 
     const [imairuInfo, setImairuInfo] = useState([{
         id: "",
-        id_name: "",
+        // user: "",//★
         image: "",
         image_name: "",
         uid: "",
-        text: "",
+        icon: "",
+        nickname: "",
         timestamp: null,
     },]);
 
-    useEffect(() => {
+    // ************************
+    const getImairuData = (id) => {
         if (!id) return false;
-
         const firebaseData = db
             .collection(DB)
             .doc(id)
@@ -50,12 +51,12 @@ const Drink_NowFeed = ({ key, id, DB, STORAGE, STORAGE2, uid }) => {
                 setImairuInfo(
                     snapshot.docs.map((doc) => ({
                         id: doc.id,
-
-                        id_name: doc.data().id_name,
+                        // user: doc.data().user,//★
                         image: doc.data().image,
                         image_name: doc.data().image_name,
                         uid: doc.data().uid,
-                        text: doc.data().text,
+                        icon: doc.data().icon,
+                        nickname: doc.data().nickname,
                         timestamp: doc.data().timestamp,
                     }))
                 )
@@ -63,20 +64,22 @@ const Drink_NowFeed = ({ key, id, DB, STORAGE, STORAGE2, uid }) => {
         return () => {
             firebaseData();
         };
+    }
+
+    useEffect(() => {
+        getImairuData(id);
     }, [id]);
+
+    // ****************************
 
     const history = useHistory()
     const loginUser = (e) => {
         auth.onAuthStateChanged(user => {
-            // ログイン状態の場合、currentUserというステート（変数）にAPIから取得したuser情報を格納
-            // ログアウト状態の場合、ログインページ（loginEvent）へリダイレクト
             !user && history.push("loginDrink");
         });
     }
 
     const windowOpenFunc = (index) => {
-        console.log(imairuInfo[index]["uid"], index)//★//この時にクリックした画像のNameを抽出したい。
-        // loginUser();
         setOpen(true);
         setTargetIndex(index);//★
     }
@@ -86,38 +89,41 @@ const Drink_NowFeed = ({ key, id, DB, STORAGE, STORAGE2, uid }) => {
         setTargetIndex(null);
     };
 
-    // {imairuInfo[targetIndex]["image"] && <img src={imairuInfo[targetIndex]["image"]} alt="" className="post_image"/>}
-
     const body = (
         <div style={modalStyle} className={classes.paper}>
-            <div className="items2">
-                {imairuInfo[targetIndex] && (
-                    <>
-                        <Icon_Feed
-                            DB="users"
-                            STORAGE="images_users"
-                            uid={imairuInfo[targetIndex]["uid"]}
-                        />
-                        <p>後ろ姿</p>
+            {imairuInfo[targetIndex] && (
+                <>
+                    <Icon_Feed
+                        DB="users"
+                        STORAGE="images_users"
+                        uid={imairuInfo[targetIndex]["uid"]}
+                        honorific="さん"
+                        greet="、この店にいます"
+                    />
+                    <div className="center">
+                        <p className="comment1">{imairuInfo[targetIndex]["nickname"]} さん、今日はこの後ろ姿です</p>
                         {/* 画像があるとき */}
                         {imairuInfo[targetIndex]["image"] && <img src={imairuInfo[targetIndex]["image"]} alt="" className="post_image" />}
                         {/* 画像ない時 */}
                         {!imairuInfo[targetIndex]["image"] && <img src={Img} alt="" className="post_image" />}
-                    </>
-
-                )}
+                        <p className="comment3">{new Date(imairuInfo[targetIndex]["timestamp"]?.toDate()).toLocaleString()} の投稿情報です</p>
+                    </div>
+                </>
+            )}
+            <div className="right">
+                <button onClick={handleClose}>×</button>
             </div>
-            <button type="button" onClick={handleClose}>× Close</button>
-        </div>
+        </div >
     );
     return (
         <div className="imairu">
             {imairuInfo && imairuInfo.map((info, index) => (
                 <div className="items">
                     {/* 画像があるとき */}
-                    {info.image && <img src={info.image} alt="" className="post_image" onClick={() => windowOpenFunc(index)} />}
+                    {info.icon && <img src={info.icon} alt="" className="post_image" onClick={() => windowOpenFunc(index)} />}
                     {/* 画像ない時 */}
-                    {!info.image && <img src={Img} alt="" className="post_image" onClick={() => windowOpenFunc(index)} />}
+                    {!info.icon && <img src={Img} alt="" className="post_image" onClick={() => windowOpenFunc(index)} />}
+                    <span className="comment3">{info.nickname}</span>
                 </div>
             ))}
             <Modal

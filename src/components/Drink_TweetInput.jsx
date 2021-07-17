@@ -64,7 +64,7 @@ const Drink_TweetInput = ({ DB, STORAGE }) => {
                             });
 
                             setDrinkMessage("");
-                            setImages({ data: [] }); 
+                            setImages({ data: [] });
                             document.querySelector('#js-image-base64').value = '';
                         });
                 }
@@ -82,51 +82,49 @@ const Drink_TweetInput = ({ DB, STORAGE }) => {
     };
 
     return (
-        <div className="drink">
-            <div className="items">
-                <div className="items2">
-                    <input
-                        type="text"
-                        placeholder="新規コメント入力"
-                        autoFocus
-                        value={drinkMessage}
-                        onChange={(e) => setDrinkMessage(e.target.value)}
-                    />
-
-                    <ReactImageBase64
-                        maxFileSize={10485760}
-                        thumbnail_size={200}
-                        // drop={true}
-                        // dropText="ファイルをドラッグ＆ドロップもしくは"
-                        // capture="environment"
-                        // multiple={true}
-                        handleChange={data => {
-                            if (data.result) {
-                                console.log(images, "imagesのこと")
-                                let list = images.data
-                                list.push(data);
-                                console.log(list, "listのこと")
-                                setImages({ data: list })
-                            } else {
-                                // setErrors([...errors, data.messages]);
-                            }
-                        }}
-                    />
-                </div>
-
-                <div>
-                    {images.data.map((image, index) => (
-                        <img src={image.fileData} alt={"sugoi"} width={70} className="tweet_image" />
-                    ))}
-                </div>
-
-                <div>
-                    <button type="button" disabled={!drinkMessage} onClick={sendTweet}>
-                        「コメント」or「コメント＆画像」の投稿
-                    </button>
-                </div>
-
+        <div className="drink_tweet">
+            {/* <div className="items"> */}
+            <div>
+                <input
+                    type="text"
+                    placeholder="新規コメント入力"
+                    autoFocus
+                    value={drinkMessage}
+                    onChange={(e) => setDrinkMessage(e.target.value)}
+                />
             </div>
+            <div>
+                <ReactImageBase64
+                    maxFileSize={10485760}
+                    thumbnail_size={200}
+                    // drop={true}
+                    // dropText="ファイルをドラッグ＆ドロップもしくは"
+                    // capture="environment"
+                    // multiple={true}
+                    handleChange={data => {
+                        if (data.result) {
+                            console.log(images, "imagesのこと")
+                            let list = images.data
+                            list.push(data);
+                            console.log(list, "listのこと")
+                            setImages({ data: list })
+                        } else {
+                            // setErrors([...errors, data.messages]);
+                        }
+                    }}
+                />
+            </div>
+            <div>
+                {images.data.map((image, index) => (
+                    <img src={image.fileData} alt={"sugoi"} width={70} className="tweet_image" />
+                ))}
+            </div>
+            <div>
+                <button type="button" disabled={!drinkMessage} onClick={sendTweet}>
+                    「コメント」or「コメント＆画像」の投稿
+                </button>
+            </div>
+
         </div>
     );
 };

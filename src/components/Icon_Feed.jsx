@@ -3,8 +3,8 @@ import { storage, db, auth } from "../firebase";
 
 import Img from "../images/no_image.png";
 
-const Icon_Feed = ({ id, DB, STORAGE, STORAGE2, uid }) => {
-    const [posts, setPosts] = useState([{
+const Icon_Feed = ({ id, DB, uid, honorific, greet }) => {
+    const [userData, setUserData] = useState([{
         id: "",
         admin: "",
         email: "",
@@ -15,13 +15,13 @@ const Icon_Feed = ({ id, DB, STORAGE, STORAGE2, uid }) => {
         timestamp: null,
     }]);
 
-    const getPostsData = (uidInfo) => {
+    const getUserData = (uidInfo) => {
         const firebase = db
             .collection(DB)
             .where('uid', '==', uidInfo)
             // .orderBy('timestamp', 'desc')
             .onSnapshot((snapshot) =>
-                setPosts(
+                setUserData(
                     //data()はfirebaseで指定されたコード記載方法
                     snapshot.docs.map((doc) => ({
                         id: doc.id,
@@ -38,20 +38,18 @@ const Icon_Feed = ({ id, DB, STORAGE, STORAGE2, uid }) => {
     }
 
     useEffect(() => {
-        getPostsData(uid);
+        getUserData(uid);
     }, [])
 
     return (
         <div>
-            <div className="imairu">
-                {posts.map((postId, index) => (
-                    <div className="items">
-                        {postId.image && <img src={postId.image} alt="" className="post_image" />}
-                        {!postId.image && <img src={Img} alt="" className="post_image" />}
-                        <span className = "comment2">{postId.nickname}/{postId.uid}</span>
-                    </div>
-                ))}
-            </div>
+            {userData.map((postId, index) => (
+                <>
+                    {postId.image && <img src={postId.image} alt="" className="icon_image" />}
+                    {!postId.image && <img src={Img} alt="" className="icon_image" />}
+                    <span className="comment2">『{postId.nickname}』{honorific}{greet}</span>
+                </>
+            ))}
         </div>
     )
 }

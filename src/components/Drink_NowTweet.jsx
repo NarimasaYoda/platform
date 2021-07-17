@@ -10,11 +10,10 @@ import Modal from '@material-ui/core/Modal';
 import Icon_Feed from "./Icon_Feed"
 import { toBlobFunction, getModalStyle } from "./Function/Functions"
 
-
 const useStyles = makeStyles((theme) => ({
     paper: {
         position: 'absolute',
-        width: 600,
+        width: 400,
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
@@ -24,18 +23,50 @@ const useStyles = makeStyles((theme) => ({
 
 const Drink_NowTweet = ({ id, DB, STORAGE, STORAGE2, uid }) => {
     const classes = useStyles();
-    // getModalStyle is not a pure function, we roll the style only on the first render
     const [modalStyle] = useState(getModalStyle(50, 50));
     const [open, setOpen] = useState(false);
     const [images, setImages] = useState({ data: [] });
-    const [idName, setIdName] = useState("");
-    const [comment, setComment] = useState("");
+
+    const [userData, setUserData] = useState([{
+        id: "",
+        admin: "",
+        email: "",
+        image: "",
+        image_name: "",
+        nickname: "",
+        uid: "",
+        timestamp: null,
+    }]);
+
+    const getUserData = (uidInfo) => {
+        const firebase = db
+            .collection("users")
+            .where('uid', '==', uidInfo)
+            // .orderBy('timestamp', 'desc')
+            .onSnapshot((snapshot) =>
+                setUserData(
+                    //data()はfirebaseで指定されたコード記載方法
+                    snapshot.docs.map((doc) => ({
+                        id: doc.id,
+                        admin: doc.data().admin,
+                        email: doc.data().email,
+                        image: doc.data().image,
+                        image_name: doc.data().image_name,
+                        nickname: doc.data().nickname,
+                        uid: doc.data().uid,
+                        timestamp: doc.data().timestamp
+                    }))
+                )
+            )
+    }
+
+    useEffect(() => {
+        getUserData(uid)
+    }, []); //最初に一度Firebaseにアクセスすることを意味する
 
     const history = useHistory()
     const loginUser = (e) => {
         auth.onAuthStateChanged(user => {
-            // ログイン状態の場合、currentUserというステート（変数）にAPIから取得したuser情報を格納
-            // ログアウト状態の場合、ログインページ（loginEvent）へリダイレクト
             !user && history.push("loginDrink");
         });
     }
@@ -47,15 +78,10 @@ const Drink_NowTweet = ({ id, DB, STORAGE, STORAGE2, uid }) => {
 
     const handleClose = () => {
         setOpen(false);
-        setIdName("");
-        setComment("");
     };
 
     const sendNewTweet = async (e) => {
-
         if (images.data.length > 0) {
-            // 画像 + テキストを登録させる。firebaseの仕様で同じファイル名の画像を複数回アップしてしまうと元々あったファイルが削除される。
-            // そのためにファイル名をランダムなファイル名を作る必要がある、以下記述のとおり。
             const image = images.data[0].fileData
             const S =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; //ランダムな文字列を作るための候補、62文字
@@ -74,7 +100,6 @@ const Drink_NowTweet = ({ id, DB, STORAGE, STORAGE2, uid }) => {
                 firebase.storage.TaskEvent.STATE_CHANGED,
                 // 3つ設定できる。進捗度合い = プログレス。エラーに関する = アップロードがうまくいかないなどのエラーを管理する。
                 // 成功した時 async（非同期＝何かを実行した後に次のことをするためのもの）
-
                 () => { }, //進捗度合いの管理するもの、
                 (err) => {
                     alert(err.message);
@@ -88,15 +113,16 @@ const Drink_NowTweet = ({ id, DB, STORAGE, STORAGE2, uid }) => {
                         .then(async (url) => {
                             await
                                 db.collection(DB).doc(id).collection("imairu").add({
-                                    id_name: idName,
+                                    // id_name: idName,
+                                    // user:user,//★
                                     image: url,
                                     image_name: fileName,
                                     uid: uid,
-                                    text: comment,
+                                    icon: userData[0].image,
+                                    nickname: userData[0].nickname,
+                                    // text: comment,
                                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                 });
-                            setIdName("");
-                            setComment("");
                             setImages({ data: [] });
                             document.querySelector('#js-image-base64').value = '';
                         });
@@ -105,15 +131,16 @@ const Drink_NowTweet = ({ id, DB, STORAGE, STORAGE2, uid }) => {
         }
         else {
             db.collection(DB).doc(id).collection("imairu").add({
-                id_name: idName,
+                // id_name: idName,
+                // user: user,//★
                 image: "",
                 image_name: "",
                 uid: uid,
-                text: comment,
+                icon: userData[0].image,
+                nickname: userData[0].nickname,
+                // text: comment,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             });
-            setIdName("");
-            setComment("");
             setImages({ data: [] });
         }
         handleClose();
@@ -126,76 +153,67 @@ const Drink_NowTweet = ({ id, DB, STORAGE, STORAGE2, uid }) => {
                     DB="users"
                     STORAGE="images_users"
                     uid={uid}
+                    honorific="さん"
+                    greet="、おつかれさまです"
+
                 />)
             }
-            
-            <div className="items2">
-                <input
-                    type="text"
-                    placeholder="ネーム入力"
-                    autoFocus
-                    value={idName}
-                    onChange={(e) => setIdName(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="コメント入力"
-                    autoFocus
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                />
 
+            <div className="center">
+                <p className="comment0">自分がいることを投稿して友達を誘おう<br />今日の後ろ姿も投稿できます</p>
 
-                <br /><p>今日の後ろ姿を投稿！ : </p>
-                <ReactImageBase64
-                    maxFileSize={10485760}
-                    thumbnail_size={50}
-                    // drop={true}
-                    // dropText="ファイルをドラッグ＆ドロップもしくは"
-                    // capture="environment"
-                    // multiple={true}
-                    handleChange={data => {
-                        if (data.result) {
-                            console.log(images, "imagesのこと")
-                            let list = images.data
-                            list.push(data);
-                            console.log(list, "listのこと")
-                            setImages({ data: list })
-                        } else {
-                            // setErrors([...errors, data.messages]);
-                        }
-                    }}
-                />
+                <div className="comment2">後ろ姿:
+                    <ReactImageBase64
+                        maxFileSize={10485760}
+                        thumbnail_size={100}
+                        // drop={true}
+                        // dropText="ファイルをドラッグ＆ドロップもしくは"
+                        // capture="environment"
+                        // multiple={true}
+                        handleChange={data => {
+                            if (data.result) {
+                                let list = images.data
+                                list.push(data);
+                                setImages({ data: list })
+                            } else {
+                                // setErrors([...errors, data.messages]);
+                            }
+                        }}
+                    /></div>
             </div>
 
-            <div>
+            <div className="center">
                 {images.data.map((image, index) => (
                     <img src={image.fileData} alt={"sugoi"} width={70} className="tweet_image" />
                 ))}
             </div>
 
-            <div>
+            <div className="center">
                 <button type="button" onClick={sendNewTweet}>
-                    「今いる！」の投稿
+                    「今いる！」ことを投稿
                 </button>
             </div>
-
-            <button type="button" onClick={handleClose}>× Close</button>
+            <div className="right">
+                <button onClick={handleClose}>×</button>
+            </div>
         </div>
     );
 
     return (
-        <div>
-            <button type="button" onClick={handleOpen}>
-                「今いる！」
-            </button>
+        <>
+            <div className="imairu_button">
+                <button type="button" onClick={handleOpen}>
+                    「今いる！」
+                </button>
+            </div>
+
             <Modal
                 open={open}
                 onClose={handleClose}
             >
                 {body}
             </Modal>
-        </div>
+        </>
     );
 }
 

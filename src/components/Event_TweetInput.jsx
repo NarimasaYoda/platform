@@ -72,7 +72,7 @@ const Event_TweetInput = ({ DB, STORAGE }) => {
                             setEventDate("");
                             setEventTitle("");
                             setEventMessage("");
-                            setImages({ data: [] }); 
+                            setImages({ data: [] });
                             document.querySelector('#js-image-base64').value = '';
                         });
                 }
@@ -95,61 +95,65 @@ const Event_TweetInput = ({ DB, STORAGE }) => {
     };
 
     return (
-        <div className="event">
-            <div className="items">
+        <div className="event_tweet center">
+            <div>
+                <input
+                    type="date"
+                    autoFocus
+                    value={eventDate}
+                    size="20"
+                    onChange={(e) => setEventDate(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="イベント名 入力（必須）"
+                    autoFocus
+                    value={eventTitle}
+                    size="30"
+                    onChange={(e) => setEventTitle(e.target.value)}
+                />
                 <div>
-                    <input
-                        type="date"
-                        autoFocus
-                        value={eventDate}
-                        onChange={(e) => setEventDate(e.target.value)}
-                    />
-                    <input
+                    <textarea
                         type="text"
-                        placeholder="イベント名 入力"
-                        autoFocus
-                        value={eventTitle}
-                        onChange={(e) => setEventTitle(e.target.value)}
-                    />
-                    <input
-                        type="text"
-                        placeholder="コメント 入力"
+                        placeholder="コメント 入力（必須）"
                         autoFocus
                         value={eventMessage}
+                        cols="30"
+                        rows="4"
                         onChange={(e) => setEventMessage(e.target.value)}
                     />
-                
-                    <ReactImageBase64
-                        maxFileSize={10485760}
-                        thumbnail_size={200}
-                        // drop={true}
-                        // dropText="ファイルをドラッグ＆ドロップもしくは"
-                        // capture="environment"
-                        // multiple={true}
-                        handleChange={data => {
-                            if (data.result) {
-                                console.log(images, "imagesのこと")
-                                let list = images.data
-                                list.push(data);
-                                console.log(list, "listのこと")
-                                setImages({ data: list })
-                            } else {
-                                // setErrors([...errors, data.messages]);
-                            }
-                        }}
-                    />
                 </div>
-                <div>    
-                    {images.data.map((image, index) => (
-                         <img src={image.fileData} alt={"sugoi"} width={70} className="tweet_image" />
-                    ))}
-                </div>
-
-                <div>
-                    <button type="button" disabled={!eventDate || !eventTitle || !eventMessage} onClick={sendTweet}>
-                        「イベント」or「イベント＆画像」の投稿
-                    </button>
-                </div>
+            </div>
+            <div>
+                <ReactImageBase64
+                    maxFileSize={10485760}
+                    thumbnail_size={200}
+                    // drop={true}
+                    // dropText="ファイルをドラッグ＆ドロップもしくは"
+                    // capture="environment"
+                    // multiple={true}
+                    handleChange={data => {
+                        if (data.result) {
+                            console.log(images, "imagesのこと")
+                            let list = images.data
+                            list.push(data);
+                            console.log(list, "listのこと")
+                            setImages({ data: list })
+                        } else {
+                            // setErrors([...errors, data.messages]);
+                        }
+                    }}
+                />
+            </div>
+            <div>
+                {images.data.map((image, index) => (
+                    <img src={image.fileData} alt={"sugoi"} width={70} className="tweet_image" />
+                ))}
+            </div>
+            <div>
+                <button type="button" disabled={!eventDate || !eventTitle || !eventMessage} onClick={sendTweet}>
+                    「イベント」or「イベント＆画像」の投稿
+                </button>
             </div>
         </div>
     );

@@ -13,6 +13,7 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 
 import Drink_NowTweet from './Drink_NowTweet'
+import Drink_NowTweetNext from './Drink_NowTweetNext'
 import Drink_NowFeed from './Drink_NowFeed'
 
 const useStyles = makeStyles(() => {
@@ -74,7 +75,7 @@ const useStyles = makeStyles(() => {
         },
         card: {
             margin: "0 auto",
-            width: "70%"
+            width: "90%"
         },
         cardContent: {
             textAlign: "center"
@@ -83,6 +84,8 @@ const useStyles = makeStyles(() => {
 });
 
 const Drink_Slide = ({ DB, STORAGE, STORAGE2, uid }) => {
+
+
     const [posts, setPosts] = useState([{
         id: "",
         date: "",
@@ -99,8 +102,7 @@ const Drink_Slide = ({ DB, STORAGE, STORAGE2, uid }) => {
         timestamp: null,
     }]);
 
-    //useEffectを使って、firebaseのデータを取得してuseStateで保持する。Firebaseに変更があったら感知する(Firebaseの機能)。
-    useEffect(() => {
+    const getPubsData = (() => {
         const firebaseData = db
             .collection(DB)
             .orderBy('timestamp', 'asc')
@@ -123,8 +125,14 @@ const Drink_Slide = ({ DB, STORAGE, STORAGE2, uid }) => {
                     }))
                 )
             )
-    }, []); //最初に一度Firebaseにアクセスすることを意味する
+    })
 
+
+    useEffect(() => {
+        getPubsData()
+    }, []);
+
+    // ******************************
     const [swipeableActions, setSwipeableActions] = useState();
     const [tabIndex, setTabIndex] = useState(0);
 
@@ -133,15 +141,15 @@ const Drink_Slide = ({ DB, STORAGE, STORAGE2, uid }) => {
     const handleChange = index => { setTabIndex(index) };
 
     useEffect(() => {
-        const ms = 500;
-        setTimeout(() => setTabIndex(2), ms * 2);
-        setTimeout(() => setTabIndex(3), ms * 3);
-        setTimeout(() => setTabIndex(4), ms * 4);
-        setTimeout(() => setTabIndex(0), ms * 5);
+        const ms = 300;
+        setTimeout(() => setTabIndex(2), ms * 1);
+        setTimeout(() => setTabIndex(3), ms * 2);
+        setTimeout(() => setTabIndex(4), ms * 3);
+        setTimeout(() => setTabIndex(0), ms * 4);
     }, [])
 
     return (
-        <>
+        <div className="slide">
             <Tabs
                 value={tabIndex}
                 onChange={(e, value) => handleChange(value)}
@@ -188,41 +196,35 @@ const Drink_Slide = ({ DB, STORAGE, STORAGE2, uid }) => {
                                     color="textSecondary"
                                     component="p"
                                 >
-                                    {postItem.text}
+                                    <span className="our_font">{postItem.text}</span>
+
                                 </Typography>
                                 <hr />
                                 {uid &&
                                     (<Drink_NowTweet
                                         id={postItem.id}
                                         DB={DB}
-                                        STORAGE={STORAGE}
                                         STORAGE2={STORAGE2}
                                         uid={uid}
                                     />)
                                 }
-                                {!uid &&
-                                    (<Drink_NowTweet
+                                {!uid && (<Drink_NowTweetNext />)}
+                                <div className="our_font">
+                                    <Drink_NowFeed
                                         id={postItem.id}
                                         DB={DB}
                                         STORAGE={STORAGE}
                                         STORAGE2={STORAGE2}
-                                    />)
-                                }
-
-                                <Drink_NowFeed
-                                    id={postItem.id}
-                                    DB={DB}
-                                    STORAGE={STORAGE}
-                                    STORAGE2={STORAGE2}
-                                />
-
+                                    />
+                                    <p className="comment3">「今いる！」投稿して、友達を呼ぼう   「今いる」メンバーが表示されます</p>
+                                </div>
                             </CardContent>
                         </Card>
                     </div>
                 ))}
             </SwipeableViews>
 
-        </>
+        </div>
     );
 };
 export default Drink_Slide;

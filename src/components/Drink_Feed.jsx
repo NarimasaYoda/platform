@@ -41,7 +41,7 @@ const Drink_Feed = ({ DB, STORAGE }) => {
     }, []); //最初に一度Firebaseにアクセスすることを意味する
 
     return (
-        <div>
+        <>
             {posts.map((postItem) => (
                 <Drink_Post
                     key={postItem.id}
@@ -59,7 +59,7 @@ const Drink_Feed = ({ DB, STORAGE }) => {
                     STORAGE={STORAGE}
                 />
             ))}
-        </div>
+        </>
     )
 }
 export default Drink_Feed

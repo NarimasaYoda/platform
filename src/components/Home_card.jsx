@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { db } from "../firebase";
 import TinderCard from 'react-tinder-card'
+import { shuffle } from './Function/Functions';
 
 const Home_card = ({DB}) => {
 
@@ -10,10 +11,15 @@ const Home_card = ({DB}) => {
         timestamp: null,
     }]);
 
-    useEffect(() => {
+    const [shufflePosts, setShufflePosts] = useState([{
+        image: "",
+        text: "",
+        timestamp: null,
+    }]);
+
+    const getCardData =()=>{
         const firebaseData = db
             .collection(DB)
-            // .orderBy('timestamp', 'desc')
             .onSnapshot((snapshot) =>
                 setPosts(
                     snapshot.docs.map((doc) => ({
@@ -24,7 +30,15 @@ const Home_card = ({DB}) => {
                     }))
                 )
             )
+    }
+
+    useEffect(() => {
+        getCardData()
     }, []); //最初に一度Firebaseにアクセスすることを意味する
+
+    useEffect(()=>{
+        setShufflePosts(shuffle(posts))
+    }, [posts])
 
     const [lastDirection, setLastDirection] = useState()
 
@@ -35,7 +49,7 @@ const Home_card = ({DB}) => {
     return (
         <div>
             <div className='cardContainer'>
-                {posts.map((postID, index) =>
+                {shufflePosts.map((postID, index) =>
                     <TinderCard
                         className='swipe'
                         key={index}

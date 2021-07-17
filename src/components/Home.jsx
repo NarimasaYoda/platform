@@ -25,13 +25,21 @@ const Home = () => {
     return (
         <>
             <h1 className="title">マチのPlatform</h1>
-            <hr />
+
+            {currentUser && //★ポイント uid取得後に可能となる
+                (<Icon_Feed
+                    DB="users"
+                    STORAGE="images_users"
+                    uid={currentUser.uid}
+                    honorific ="さん"
+                    greet ="、こんにちわ"
+                />)
+            }
             <div className="home">
                 <div className="items">
-                    <p><Link to="/drink">飲みに行く</Link></p>
-                    <p><Link to="/event">イベント情報</Link></p>
-                    <p><Link to="/chat">メッセージ</Link></p>
-                    <p><Link to="/admin">管理者画面</Link></p>
+                    <p className="comment0"><Link to="/drink">飲みに行く</Link></p>
+                    <p className="comment0"><Link to="/event">イベント情報</Link></p>
+                    <p className="comment0"><Link to="/conversation">メッセージ</Link></p>
                 </div>
 
                 <div className="info">
@@ -40,18 +48,10 @@ const Home = () => {
             </div>
 
             <hr />
-            {currentUser && //★ポイント uid取得後に可能となる
-                (<Icon_Feed
-                    DB="users"
-                    STORAGE="images_users"
-                    uid={currentUser.uid}
-                />)
-            }
+
             <button onClick={() => history.push("/login")}>ユーザログイン</button>
             <Logout JumpTo = "/"/>
-            {/* <Logout JumpTo="login" />
-            <p><Link to="/login">loginへ</Link></p> */}
-            <p><Link to="/test">testへ</Link></p>
+            <button onClick={() => history.push("/admin")}>管理者画面</button>
         </>
     )
 }

@@ -1,5 +1,6 @@
 body {
-    font-family: sans-serif;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    color: #666;
 }
 input {
     border-radius: 16px;
@@ -7,7 +8,13 @@ input {
     border: 1px solid #666;
     padding: 6px 16px;
     outline: none;
+}textarea {
+    border-radius: 16px;
+    border: 1px solid #666;
+    padding: 6px 16px;
+    outline: none;
 }
+
 button {
     border-radius: 16px;
     border: none;
@@ -21,23 +28,47 @@ button:hover {
 .title{
     font-family: 'M PLUS Rounded 1c', sans-serif;
     text-align: center;
-    margin-top: 0;
+    /* margin: 0; */
     font-weight: bold;
     color: #666;
 }
 
-.post_comment1{font-size: 14px}
-.comment1{font-size: 14px}
-.post_comment2{font-size: 13px}
-.comment2{font-size: 13px}
-.post_comment3{font-size: 9px}
-.comment3{font-size: 9px}
+.comment0{font-size: 18px; margin: 0px; padding:1px}
+.comment1{font-size: 14px; margin: 6px 0; padding:1px}
+.comment2{font-size: 13px; margin: 5px 0; padding:1px}
+.comment3{font-size: 9px; margin: 3px 0; padding:1px}
 
+/* ourfont */
+.our_font{
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    color: #666;
+}
+
+/* center */
+.center{
+    text-align: center;
+}
+/* right */
+.right{
+    text-align: right;
+}
+
+/* border */
+.border_white{
+    border-width: 5px 0px 0px 0px; /* 太さ */
+    border-style: solid; /* 線種 */
+    border-color: white; 
+}
+
+/* icon */
+.icon_image{
+    border-radius: 50%;
+    width:  40px;
+    height: 40px;
+}
 
 /* home */
 .home{
-    /* display: flex;
-    align-items: center; */
     max-width: 500px;
     margin: 0 auto;
 }
@@ -52,7 +83,7 @@ button:hover {
     background-color: #fff66f;
 }
 .home .items p{
-    margin: 0 10px;
+    margin: 0 5px;
 }
 .home .info{
     background-color: #fff66f;
@@ -78,7 +109,7 @@ button:hover {
     width: 260px;
     /* max-width: 260px; */
     height: 300px;
-    box-shadow: 0px 0px 40px 0px rgb(253, 255, 211);
+    box-shadow: 0px 0px 30px 0px rgb(253, 255, 211);
     border-radius: 30px;
     background-size: cover;
     background-position: center;
@@ -99,13 +130,14 @@ button:hover {
      0px -1px 0px #ffffff;
 }
 
-
 .infoText {
   width: 100%;
   height: 28px;
   justify-content: center;
   display: flex;
   color: #666;
+  /* font-size: 24px; */
+  padding: 2px 0 0 0;
   text-shadow: 
   1px  1px 0px #ffffff,
   -1px  1px 0px #ffffff,
@@ -129,44 +161,25 @@ button:hover {
   100% { transform: scale(1,1) }
 }
 
-/* .Feed・Post */
-.feed_post_area{
-  background-color: #d5ffd4;
-  padding: 2px 0;
-}
-
-.feed_post_area .items{
-  margin: 0 auto;
-  text-align: center;
-  width:70%;
-  background-color: white;
-  border-radius: 16px;
-}
-
-.feed_post_area .items .post_image{
-  max-height: 100px
-}
-
 /* drink */
-.drink{
-    background-color: #fff66f;
-    padding: 2px 0;
-    
+.drink_freeArea{
+    background-color: rgb(233, 233, 233);
 }
 
-.drink .items{
-    margin: 0 auto;
+.drink_tweet{
+    margin: 2px auto;
+    padding:1px;
     text-align: center;
     width:70%;
     background-color: white;
     border-radius: 16px;
 }
 
-.drink .items .post_image{
+.post_image{
     max-height: 140px
 }
 
-/* imairu */
+/* imairu ★★★*/
 .imairu .items{
     display: inline-block; 
 }
@@ -182,21 +195,84 @@ button:hover {
     transition:0.4s all;
 }
 
-
 /* .event */
-.event{
-    background-color: #d5ffd4;
-    padding: 2px 0;
+.event_area{
+    background-color: #CCFFCC;
 }
 
-.event .items{
-    margin: 0 auto;
-    text-align: center;
+.event_tweet{
+    margin: 2px auto;
+    padding:1px;
     width:70%;
     background-color: white;
     border-radius: 16px;
 }
 
-.event .items .post_image{
-    max-height: 100px
+/* conversation */
+.conversation_area{
+    background-color:#CCFFFF;
 }
+
+.container{
+    background-color:white;
+    width:300px;
+    margin:0 auto;
+}
+
+.chat_image{
+    margin:0 auto;
+    width:95%;
+}
+
+/* conversation_chatroom */
+.chatroom{
+    margin: 2px auto;
+    padding:1px;
+    width:95%;
+    background-color: white;
+    border-radius: 16px;
+}
+
+.chatroom_input{text-align: center;}
+
+.chatName{
+    display: flex;
+    flex-direction: row;
+}
+
+.mySideName{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content:space-between;
+    margin:0 10px;
+}
+.yourSideName{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    margin:0 10px;
+}
+
+.mySideChat{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content:space-between;
+}
+
+.yourSideChat{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+}
+
+/* conversation_chatroom details */
+.chatroom_comments{
+    max-height:150px;
+    overflow-y: scroll;
+}
+
+.chat_container{
+    width:50%;
+    margin:0 10px;
+}
+

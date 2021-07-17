@@ -79,9 +79,8 @@ const Event_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
 
   return (
     <>
-      <div className="event">
-        <div className="items">
-          <p className="comment1">日時：{date}</p>
+        <div className="event_tweet center">
+          <p className="comment1">イベント日時：{date}</p>
           <p className="comment1">イベント：{event}</p>
           <p className="comment1">メッセージ：{text}</p>
           <p className="comment3">
@@ -98,13 +97,11 @@ const Event_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
             {/* firebaseのデータを取得、mapでデータを取得してレンダリングする */}
             {comments &&
               comments.map((comment) => (
-                <p>
+                <p className="comment2">
                   <span className="comment3">
                     {new Date(comment.timestamp?.toDate()).toLocaleString()}<span> : </span>
                   </span>
-                  <span className="comment2">
                     {comment.text}
-                  </span>
                 </p>
               ))}
           </div>
@@ -123,7 +120,6 @@ const Event_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
               コメントを投稿する
           </button>
         </div>
-      </div>
     </>
   );
 };

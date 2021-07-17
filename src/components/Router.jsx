@@ -6,8 +6,8 @@ import Login from "./Login"
 
 import Drink from "./Drink"
 import Event from "./Event"
-import Chat from "./Chat"
-import Conversations from "./Conversations"
+// import Chat from "./Chat"
+import Conversation from "./Conversation"
 
 import Admin from "./Admin"
 import AdminDrink from "./AdminDrink"
@@ -19,19 +19,16 @@ const Router = () => (
         <Route path="/login" render={() => <Login JumpTo="/" />} />
         <Route path="/loginEvent" render={() => <Login JumpTo="event" />} />
         <Route path="/loginDrink" render={() => <Login JumpTo="drink" />} />
-
-
-        <Route path="/drink" component={Drink} />
-        <Route path="/event" component={Event} />
-        <Route path="/chat" component={Chat} />
-        <Route path="/conversations" component={Conversations} />
-        {/* <Route path="/conversations" render={() => <Conversations aaa="user1" />} /> */}
-
+        <Route path="/loginConversation" render={() => <Login JumpTo="conversation" />} />
 
         <Route path="/admin" component={Admin} />
         <Route path="/adminDrink" component={AdminDrink} />
 
-
+        <Route path="/drink" component={Drink} />
+        <Route path="/event" component={Event} />
+        {/* <Route path="/chat" component={Chat} /> */}
+        <Route path="/conversation" component={Conversation} />
+ 
         <Route path="/test" component={Test} />
         {/* <Route path="/blog/:id" component={Blog} /> */}
         {/* <Route path="/sum/" component={Sum0} /> */}

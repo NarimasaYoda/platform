@@ -5,34 +5,42 @@ import { useHistory } from 'react-router-dom';
 import Icon_Feed from "./Icon_Feed"
 import Img_Chat from "../images/chat.png";
 
-import Conversations_Post_test from "./old/Conversations_Post_test";
-import Conversations_Post from "./Conversations_Post";
+import Conversation_Post from "./Conversation_Post";
 import Logout from "./Logout";
 
-const Conversations_Feed = ({ uid, DB }) => {
+const Conversation_Feed = ({ uid, DB }) => {
+    const [chatRooms, setChatRooms] = useState([{
+        id: "",
+        room_name: "",
+        uid1: "",
+        uid2: "",
+        user1: "",
+        user2: "",
+        user1_image: "",
+        user2_image: "",
+        timestamp: null,
+    }]);
 
     const [chatRooms1, setChatRooms1] = useState([{
         id: "",
         room_name: "",
         uid1: "",
-        user1: "",
-        user1_image: "",
         uid2: "",
+        user1: "",
         user2: "",
+        user1_image: "",
         user2_image: "",
         timestamp: null,
     }]);
-
-    console.log(uid, DB)
 
     const [chatRooms2, setChatRooms2] = useState([{
         id: "",
         room_name: "",
         uid1: "",
-        user1: "",
-        user1_image: "",
         uid2: "",
+        user1: "",
         user2: "",
+        user1_image: "",
         user2_image: "",
         timestamp: null,
     }]);
@@ -40,7 +48,7 @@ const Conversations_Feed = ({ uid, DB }) => {
     const getChatRoomsData1 = (uidInfo) => {
         const firebase = db
             .collection(DB)
-            .where('uid1', '==', uidInfo) //★★★まとめられないか
+            .where('uid1', '==', uidInfo)
             // .orderBy('timestamp', 'asc')
             .onSnapshot((snapshot) =>
                 setChatRooms1(
@@ -48,10 +56,10 @@ const Conversations_Feed = ({ uid, DB }) => {
                         id: doc.id,
                         room_name: doc.data().room_name,
                         uid1: doc.data().uid1,
-                        user1: doc.data().user1,
-                        user1_image: doc.data().user1_image,
                         uid2: doc.data().uid2,
+                        user1: doc.data().user1,
                         user2: doc.data().user2,
+                        user1_image: doc.data().user1_image,
                         user2_image: doc.data().user2_image,
                         timestamp: doc.data().timestamp
                     }))
@@ -62,7 +70,7 @@ const Conversations_Feed = ({ uid, DB }) => {
     const getChatRoomsData2 = (uidInfo) => {
         const firebase = db
             .collection("chats")
-            .where('uid2', '==', uidInfo) //★まとめられないか
+            .where('uid2', '==', uidInfo)
             // .orderBy('timestamp', 'asc')
             .onSnapshot((snapshot) =>
                 setChatRooms2(
@@ -70,10 +78,10 @@ const Conversations_Feed = ({ uid, DB }) => {
                         id: doc.id,
                         room_name: doc.data().room_name,
                         uid1: doc.data().uid1,
-                        user1: doc.data().user1,
-                        user1_image: doc.data().user1_image,
                         uid2: doc.data().uid2,
+                        user1: doc.data().user1,
                         user2: doc.data().user2,
+                        user1_image: doc.data().user1_image,
                         user2_image: doc.data().user2_image,
                         timestamp: doc.data().timestamp
                     }))
@@ -82,50 +90,52 @@ const Conversations_Feed = ({ uid, DB }) => {
     }
 
     useEffect(() => {
-        getChatRoomsData1(uid);
-        getChatRoomsData2(uid);
+        getChatRoomsData1(uid); //chatRoom1
+        getChatRoomsData2(uid); //chatRoom2
     }, [])
 
-    console.log(chatRooms1, chatRooms1[0], chatRooms1[0].user1)
+    useEffect(() => {
+        setChatRooms([...chatRooms1, ...chatRooms2])
+    }, [chatRooms1, chatRooms2])
 
+    // console.log(chatRooms1,"★chatRooms1")
+    // console.log(chatRooms2, "★chatRooms2")
+    console.log(chatRooms, "★chatRooms")
 
     return (
         <div>
-            {chatRooms1.map((chatItem) => (
-                <Conversations_Post
-
+            {chatRooms1.map((chatItem, index) => (
+                <Conversation_Post
                     key={chatItem.id}
-
                     id={chatItem.id}
 
-                    room_name={chatItem.room_name}
-                    user1={chatItem.user1}
-                    user1_image={chatItem.user1_image}
-                    uid2={chatItem.uid2}
-                    user2={chatItem.user2}
-                    user2_image={chatItem.user_image2}
-                    timestamp={chatItem.timestamp}
-
+                    uid={uid}
                     DB={DB}
+                    room_name={chatItem.room_name}
+                    uid1={chatItem.uid1}
+                    uid2={chatItem.uid2}
+                    user1={chatItem.user1}
+                    user2={chatItem.user2}
+                    user1_image={chatItem.user1_image}
+                    user2_image={chatItem.user2_image}
+                    timestamp={chatItem.timestamp}
                 />
             ))}
-
-
-            {chatRooms2.map((chatItem) => (
-                <Conversations_Post
+            {chatRooms2.map((chatItem, index) => (
+                <Conversation_Post
                     key={chatItem.id}
-
                     id={chatItem.id}
 
-                    room_name={chatItem.room_name}
-                    user1={uid}
-                    user1_image={chatItem.user1_image}
-                    uid2={chatItem.uid2}
-                    user2={chatItem.user2}
-                    user2_image={chatItem.user_image2}
-                    timestamp={chatItem.timestamp}
-
+                    uid={uid}
                     DB={DB}
+                    room_name={chatItem.room_name}
+                    uid1={chatItem.uid1}
+                    uid2={chatItem.uid2}
+                    user1={chatItem.user1}
+                    user2={chatItem.user2}
+                    user1_image={chatItem.user1_image}
+                    user2_image={chatItem.user2_image}
+                    timestamp={chatItem.timestamp}
                 />
             ))}
 
@@ -133,4 +143,4 @@ const Conversations_Feed = ({ uid, DB }) => {
     )
 }
 
-export default Conversations_Feed
+export default Conversation_Feed

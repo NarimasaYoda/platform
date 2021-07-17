@@ -20,8 +20,6 @@ const Drink_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
   const history = useHistory()
   const loginUser = (e) => {
     auth.onAuthStateChanged(user => {
-      // ログイン状態の場合、currentUserというステート（変数）にAPIから取得したuser情報を格納
-      // ログアウト状態の場合、ログインページ（loginEvent）へリダイレクト
       !user && history.push("loginDrink");
     });
   }
@@ -73,12 +71,12 @@ const Drink_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
 
   return (
     <>
-      <div className="drink">
-        <div className="items">
+      <div className="drink_tweet">
+        {/* <div className="items"> */}
           <p className="comment1">{text}</p>
           <p className="comment3">
             投稿：{new Date(timestamp?.toDate()).toLocaleString()}
-            <button onClick={deleteData}>削除</button>
+            <button onClick={deleteData}>投稿削除</button>
           </p>
           {/* 画像があるとき */}
           {image && <img src={image} alt="" className="post_image" />}
@@ -88,32 +86,30 @@ const Drink_Post = ({ key, id, date, event, image, image_name, text, timestamp, 
           <div>
             {comments &&
               comments.map((comment) => (
-                <p>
+                <p className="comment2">
                   <span className="comment3">
                     {new Date(comment.timestamp?.toDate()).toLocaleString()}<span> : </span>
                   </span>
-                  <span className="comment2">
                     {comment.text}
-                  </span>
                 </p>
               ))}
           </div>
 
 
           {/* formタグでコメント入力欄 */}
-            <input
-              type="text"
-              placeholder="コメント入力"
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-            />
-            <button
-              type="button"
-              disabled={!comment}
-              onClick={handleAddNewComment}>
-              コメントを投稿する
-            </button>
-        </div>
+          <input
+            type="text"
+            placeholder="コメント入力"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          />
+          <button
+            type="button"
+            disabled={!comment}
+            onClick={handleAddNewComment}>
+            コメントを投稿する
+          </button>
+        {/* </div> */}
       </div>
     </>
   );
