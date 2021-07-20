@@ -9,7 +9,7 @@ import { toBlobFunction, getModalStyle } from "./Function/Functions"
 const useStyles = makeStyles((theme) => ({
     paper: {
         position: 'absolute',
-        width: 600,
+        width: "350px",
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
@@ -36,10 +36,12 @@ const Drink_NowTweetNext = () => {
     const body = (
         <div style={modalStyle} className={classes.paper}>
             <div style={modalStyle} className={classes.paper}>
-                <p className="comment1">「今いる」ことを投稿して、友達を呼ぼう</p>
-                <p className="comment3">投稿時にはユーザ登録が必要です</p>
-                <button onClick={() => history.push("/loginDrink")}>ユーザログイン</button>
-                {/* <button type="button" onClick={handleClose}>× Close</button> */}
+                <p className="comment1 center">「今いる」ことを投稿して、友達を呼ぼう</p>
+                <p className="comment3 center">投稿時にはユーザ登録が必要です</p>
+                <div className="center">
+                    <button onClick={() => history.push("/loginDrink")}>ユーザログイン</button>
+                    {/* <button type="button" onClick={handleClose}>× Close</button> */}
+                </div>
             </div>
             <button type="button" onClick={handleClose}>× Close</button>
         </div>

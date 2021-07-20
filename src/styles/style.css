@@ -8,7 +8,9 @@ input {
     border: 1px solid #666;
     padding: 6px 16px;
     outline: none;
-}textarea {
+}
+
+textarea {
     border-radius: 16px;
     border: 1px solid #666;
     padding: 6px 16px;
@@ -17,14 +19,18 @@ input {
 
 button {
     border-radius: 16px;
-    border: none;
+    /* border: none; */
+    border: 1px solid #ccc;
+    background-color:#DCDCDC;
     padding: 4px 16px;
 }
+
 button:hover {
     background-color: #ff7fff;
     color: #fff;
     cursor: pointer;
 }
+
 .title{
     font-family: 'M PLUS Rounded 1c', sans-serif;
     text-align: center;
@@ -48,6 +54,7 @@ button:hover {
 .center{
     text-align: center;
 }
+
 /* right */
 .right{
     text-align: right;
@@ -83,7 +90,7 @@ button:hover {
     background-color: #fff66f;
 }
 .home .items p{
-    margin: 0 5px;
+    margin: 0 5px;  
 }
 .home .info{
     background-color: #fff66f;
@@ -113,7 +120,9 @@ button:hover {
     border-radius: 30px;
     background-size: cover;
     background-position: center;
+    /* z-index: 2; */
 }
+
 .card h3 {
     position: absolute;
     bottom: 0;
@@ -148,29 +157,33 @@ button:hover {
   -1px  0px 0px #ffffff,
    0px -1px 0px #ffffff;
   animation-name: popup;
-  animation-duration: 800ms;
+  animation-duration: 2000ms;
 }
 
 @keyframes popup {
   0%   { transform: scale(1,1) }
-  10%  { transform: scale(1.1,1.1) }
-  30%  { transform: scale(.9,.9) }
-  50%  { transform: scale(1,1) }
-  57%  { transform: scale(1,1) }
-  64%  { transform: scale(1,1) }
+  10%  { transform: scale(1,1) }
+  30%  { transform: scale(1.15,1.15) }
+  50%  { transform: scale(.9,.9) }
+  70%  { transform: scale(1,1) }
   100% { transform: scale(1,1) }
+}
+
+.swipe_image{
+    height: "150px"
 }
 
 /* drink */
 .drink_freeArea{
-    background-color: rgb(233, 233, 233);
+    background-color: #8EF1FF;
+    padding:0 0 2px;
 }
 
 .drink_tweet{
     margin: 2px auto;
     padding:1px;
     text-align: center;
-    width:70%;
+    width:95%;
     background-color: white;
     border-radius: 16px;
 }
@@ -198,12 +211,13 @@ button:hover {
 /* .event */
 .event_area{
     background-color: #CCFFCC;
+    padding:0 0 2px;
 }
 
 .event_tweet{
     margin: 2px auto;
     padding:1px;
-    width:70%;
+    width:95%;
     background-color: white;
     border-radius: 16px;
 }
@@ -211,6 +225,7 @@ button:hover {
 /* conversation */
 .conversation_area{
     background-color:#CCFFFF;
+    padding:0 0 2px;
 }
 
 .container{
@@ -232,8 +247,6 @@ button:hover {
     background-color: white;
     border-radius: 16px;
 }
-
-.chatroom_input{text-align: center;}
 
 .chatName{
     display: flex;
@@ -276,3 +289,14 @@ button:hover {
     margin:0 10px;
 }
 
+/* slide */
+.slide{
+    height:485px;
+}
+
+/* responsive design*/
+/* @media screen and (max-width:640px){
+    .slide{
+        max-width:640px;
+    }
+} */

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import firebase from "firebase/app";
 import { storage, db, auth } from "../firebase";
 import { useHistory } from 'react-router-dom';
-
-import Img from "../images/no_image.png";
+import { Accordion, AccordionSummary, AccordionDetails } from '@material-ui/core'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const Conversation_Post = ({ key, id, uid, DB, room_name, uid1, uid2, user1, user2, user1_image, user2_image, timestamp, STORAGE }) => {
 
@@ -59,27 +59,6 @@ const Conversation_Post = ({ key, id, uid, DB, room_name, uid1, uid2, user1, use
         getCommentsData()
     }, [id]);
 
-
-    let set_uid = "";
-    let set_user = "";
-    let set_user_image = "";
-
-    // useEffect(() => {
-    //     if (uid === uid1) {
-    //         set_uid = uid1
-    //         set_user = user1
-    //         set_user_image = user1_image
-    //         console.log(set_user, "set_user")
-    //     } else {
-    //         set_uid = uid2
-    //         set_user = user2
-    //         set_user_image = user2_image
-    //         console.log(set_user, "set_user")
-    //     }
-    // }, [userCheckFlag]);
-
-    // (chatRooms[i].uid1 + chatRooms[i].uid2) === (uid1 + uid2) ? i_flag = i_flag + 1 : i_flag = i_flag;
-
     const handleAddNewComment = (e) => {
         db.collection(DB).doc(id).collection("conversation").add({
             uid: uid === uid1 ? uid1 : uid2,
@@ -91,11 +70,6 @@ const Conversation_Post = ({ key, id, uid, DB, room_name, uid1, uid2, user1, use
         setComment("");
     };
 
-    // const deleteData = () => {
-    //     loginUser();
-    //     db.collection(DB).doc(id).delete();
-    //     // storage.ref(`${STORAGE}/${image_name}`).delete();
-    // }
 
     const nameSide = (uidData) => {
         if (uidData === uid1) {
@@ -114,30 +88,29 @@ const Conversation_Post = ({ key, id, uid, DB, room_name, uid1, uid2, user1, use
     }
 
     return (
-        <div className="chatroom">
-            <div className="chatName" className={nameSide(uid)}>
-                <p className="comment1">「{user1}」さん</p>
-                <p className="comment1">「{user2}」さん</p>
-            </div>
+        <>
+            <div className="chatroom center">
+                <div className="chatName" className={nameSide(uid)}>
+                    <p className="comment1">「{user1}」さん</p>
+                    <p className="comment1">「{user2}」さん</p>
+                </div>
 
-            <div className="chatroom_comments">
-                {comments &&
-                    comments.map((comment) => (
-                        <div className={chatSide(comment.uid)}>
-                            <div className="chat_container">
-                                <p className="comment2">
-                                    <span className="comment3">
-                                        {new Date(comment.timestamp?.toDate()).toLocaleString()}<span> : </span>
-                                    </span>
-                                    {comment.text}/{comment.user}
-                                </p>
+                <div className="chatroom_comments center">
+                    {comments &&
+                        comments.map((comment) => (
+                            <div className={chatSide(comment.uid)}>
+                                <div className="chat_container">
+                                    <p className="comment2">
+                                        <span className="comment3">
+                                            {new Date(comment.timestamp?.toDate()).toLocaleString()}<span> : </span>
+                                        </span>
+                                        {comment.text}
+                                    </p>
 
+                                </div>
                             </div>
-                        </div>
-                    ))}
-            </div>
-
-            <div className="chatroom_input">
+                        ))}
+                </div>
                 <input
                     type="text"
                     placeholder="コメントを記述"
@@ -151,7 +124,7 @@ const Conversation_Post = ({ key, id, uid, DB, room_name, uid1, uid2, user1, use
                     コメントを投稿する
                 </button>
             </div>
-        </div>
+        </>
     );
 };
 

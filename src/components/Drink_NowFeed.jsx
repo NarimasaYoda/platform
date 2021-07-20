@@ -12,7 +12,7 @@ import Icon_Feed from "./Icon_Feed"
 const useStyles = makeStyles((theme) => ({
     paper: {
         position: 'absolute',
-        width: 300,
+        width: "300px",
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
         boxShadow: theme.shadows[5],

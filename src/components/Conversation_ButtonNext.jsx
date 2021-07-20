@@ -9,7 +9,7 @@ import { toBlobFunction, getModalStyle, createChatRoom } from "./Function/Functi
 const useStyles = makeStyles((theme) => ({
     paper: {
         position: 'absolute',
-        width: 600,
+        width: "350px",
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
@@ -34,9 +34,11 @@ const Conversation_ButtonNext = () => {
 
     const body = (
         <div style={modalStyle} className={classes.paper}>
-            <p className="comment0" className="title">新しい友達とチャットしよう</p>
-            <p className="comment2">投稿時にはユーザ登録が必要です</p>
-            <button onClick={() => history.push("/loginConversation")}>ユーザログイン</button>
+            <p className="comment0 center">新しい友達とチャットしよう</p>
+            <p className="comment2 center">投稿時にはユーザ登録が必要です</p>
+            <div className="center">
+            <button  onClick={() => history.push("/loginConversation")}>ユーザログイン</button>
+            </div>
             {/* <button type="button" onClick={handleClose}>× Close</button> */}
         </div>
     );

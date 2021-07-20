@@ -7,6 +7,8 @@ import Home_card from './Home_card';
 import Icon_Feed from "./Icon_Feed";
 import Logout from "./Logout"
 
+
+
 const Home = () => {
     const [currentUser, setCurrentUser] = useState("")
 
@@ -37,7 +39,7 @@ const Home = () => {
             }
             <div className="home">
                 <div className="items">
-                    <p className="comment0"><Link to="/drink">飲みに行く</Link></p>
+                    <p className="comment0"><Link to="/drink">呑みにいく</Link></p>
                     <p className="comment0"><Link to="/event">イベント情報</Link></p>
                     <p className="comment0"><Link to="/conversation">メッセージ</Link></p>
                 </div>

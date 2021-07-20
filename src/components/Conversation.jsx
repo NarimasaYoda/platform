@@ -58,7 +58,6 @@ const Conversation = () => {
                     <img src={Img_Chat} alt="" className="chat_image" />
                 </div>
                 <hr className="border_white" />
-                <p className="comment0 center">chatroom</p>
 
                 {currentUser &&
                     (<Conversation_Feed

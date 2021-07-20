@@ -12,8 +12,8 @@ import Img from "../images/no_image.png";
 const useStyles = makeStyles((theme) => ({
     paper: {
         position: 'absolute',
-        width: 500,
-        height: 200,
+        width: "350px",
+        height: "300px",
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
@@ -203,7 +203,9 @@ const Conversation_Button = ({ id, DB, STORAGE, STORAGE2, uid }) => {
                 ))}
             </div>
 
-            <button type="button" onClick={handleClose}>× Close</button>
+            <div className="right">
+                <button onClick={handleClose}>×</button>
+            </div>
         </div>
     );
 

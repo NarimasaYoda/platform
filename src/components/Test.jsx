@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from "react-router-dom"
+
 // import Test1 from './Test1'
 // import Test2 from './Test2'
 // import Test_Feed from './Test_Feed'
@@ -10,12 +11,13 @@ import { Link } from "react-router-dom"
 // import Test_Modal from './Test_Modal'
 // import Drink_Now from './Drink_Now'
 // import Rcv_func from './sub_function/Rcv_func'
+import Test_accordion from './Test_accordion'
 
 
 const Test = () => {
     return (
         <div>
-            <p>Test</p>
+            <h1 className="title">Test</h1>
             {/* <Test1/> */}
             {/* <Test2/> */}
             {/* <Test_TweetInput
@@ -41,6 +43,7 @@ const Test = () => {
                 STORAGE="image_pubs"
             /> */}
             {/* <Rcv_func/> */}
+            <Test_accordion/>
 
         </div>
     )

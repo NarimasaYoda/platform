@@ -3,6 +3,8 @@ import { db } from "../firebase";
 import TinderCard from 'react-tinder-card'
 import { shuffle } from './Function/Functions';
 
+import Img_station from "../images/kyodo_station.png";
+
 const Home_card = ({DB}) => {
 
     const [posts, setPosts] = useState([{
@@ -56,15 +58,16 @@ const Home_card = ({DB}) => {
                         onSwipe={(dir) => swiped(dir)}>
                         <div
                             style={{ backgroundImage: 'url(' + postID.image + ')' }}
-                            className='card'>
+                            className="card">
                             <h3>{postID.text}</h3>
                         </div>
                     </TinderCard>
                 )}
+
             </div>
             {lastDirection ?
                 <h2 className='infoText'>You swiped "{lastDirection}"</h2>
-                : <h2 className='infoText'>You swipe?</h2>}
+                : <h2 className='infoText'>Swipe?</h2>}
         </div>
     )
 }

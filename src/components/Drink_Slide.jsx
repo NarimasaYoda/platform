@@ -50,7 +50,6 @@ const useStyles = makeStyles(() => {
             backgroundColor: "#60bce4"
         },
         image: {
-            margin: "0 0 0 70px",
             height: "150px"
         },
         active0: {
@@ -75,7 +74,7 @@ const useStyles = makeStyles(() => {
         },
         card: {
             margin: "0 auto",
-            width: "90%"
+            width: "95%"
         },
         cardContent: {
             textAlign: "center"
@@ -185,11 +184,13 @@ const Drink_Slide = ({ DB, STORAGE, STORAGE2, uid }) => {
                                 title={postItem.item_fullName}
                                 subheader={postItem.item_comment}
                             />
-                            <img
-                                alt={postItem.item_fullName}
-                                className={classes.image}
-                                src={postItem.image}
-                            />
+                            <div className="center">
+                                <img
+                                    alt={postItem.item_fullName}
+                                    className={classes.image}
+                                    src={postItem.image}
+                                />
+                            </div>
                             <CardContent className={classes.cardContent}>
                                 <Typography
                                     variant="body2"
@@ -216,14 +217,13 @@ const Drink_Slide = ({ DB, STORAGE, STORAGE2, uid }) => {
                                         STORAGE={STORAGE}
                                         STORAGE2={STORAGE2}
                                     />
-                                    <p className="comment3">「今いる！」投稿して、友達を呼ぼう   「今いる」メンバーが表示されます</p>
+                                    <p className="comment3">「今いる！」投稿して、友達を呼ぼう　「今いる!」メンバーが表示されます</p>
                                 </div>
                             </CardContent>
                         </Card>
                     </div>
                 ))}
             </SwipeableViews>
-
         </div>
     );
 };

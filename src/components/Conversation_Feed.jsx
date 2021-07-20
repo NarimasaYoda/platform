@@ -104,6 +104,7 @@ const Conversation_Feed = ({ uid, DB }) => {
 
     return (
         <div>
+            <p className="comment0 center">{chatRooms.length > 0 ? "chatroom" : "現在chatroomはありません"}</p>
             {chatRooms1.map((chatItem, index) => (
                 <Conversation_Post
                     key={chatItem.id}
