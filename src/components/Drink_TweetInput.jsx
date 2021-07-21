@@ -88,7 +88,7 @@ const Drink_TweetInput = ({ DB, STORAGE }) => {
                 <input
                     type="text"
                     placeholder="新規コメント入力"
-                    autoFocus
+                    // autoFocus
                     value={drinkMessage}
                     onChange={(e) => setDrinkMessage(e.target.value)}
                 />

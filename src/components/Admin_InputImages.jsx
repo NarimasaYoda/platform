@@ -71,7 +71,6 @@ const Admin_InputImages = ({ DB, STORAGE }) => {
                     <input
                         type="text"
                         placeholder="コメント 入力"
-                        autoFocus
                         value={comments}
                         onChange={(e) => setComments(e.target.value)}
                     />

@@ -93,35 +93,30 @@ const Admin_InputPubs = ({ DB, STORAGE }) => {
                     <input
                         type="text"
                         placeholder="例：GTJZ"
-                        autoFocus
                         value={tagName}
                         onChange={(e) => setTagName(e.target.value)}
                     />
                     <input
                         type="text"
                         placeholder="例：G（イニシャル）"
-                        autoFocus
                         value={itemInitial}
                         onChange={(e) => setItemInitial(e.target.value)}
                     />
                     <input
                         type="text"
                         placeholder="例：後藤醸造"
-                        autoFocus
                         value={itemFullName}
                         onChange={(e) => setItemFullName(e.target.value)}
                     />
                     <input
                         type="text"
                         placeholder="例：立ち飲み"
-                        autoFocus
                         value={itemComment}
                         onChange={(e) => setItemComment(e.target.value)}
                     />
                     <input
                         type="text"
                         placeholder="例：東京農大出身のご夫婦が作るクラフトビール"
-                        autoFocus
                         value={comments}
                         onChange={(e) => setComments(e.target.value)}
                     />

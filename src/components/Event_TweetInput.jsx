@@ -99,7 +99,7 @@ const Event_TweetInput = ({ DB, STORAGE }) => {
             <div>
                 <input
                     type="date"
-                    autoFocus
+                    // autoFocus
                     value={eventDate}
                     size="20"
                     onChange={(e) => setEventDate(e.target.value)}
@@ -107,7 +107,7 @@ const Event_TweetInput = ({ DB, STORAGE }) => {
                 <input
                     type="text"
                     placeholder="イベント名 入力（必須）"
-                    autoFocus
+                    // autoFocus
                     value={eventTitle}
                     size="30"
                     onChange={(e) => setEventTitle(e.target.value)}
@@ -116,7 +116,7 @@ const Event_TweetInput = ({ DB, STORAGE }) => {
                     <textarea
                         type="text"
                         placeholder="コメント 入力（必須）"
-                        autoFocus
+                        // autoFocus
                         value={eventMessage}
                         cols="30"
                         rows="4"

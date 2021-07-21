@@ -110,6 +110,12 @@ button:hover {
     width: 90vw;
     max-width: 260px;
     height: 300px;
+    background-image: url("../images/kyodo_station.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 30px;
+    box-shadow: 0px 0px 30px 0px rgb(253, 255, 211);
 }
 .card {
     position: relative;
@@ -290,9 +296,9 @@ button:hover {
 }
 
 /* slide */
-.slide{
+/* .slide{
     height:485px;
-}
+} */
 
 /* responsive design*/
 /* @media screen and (max-width:640px){
